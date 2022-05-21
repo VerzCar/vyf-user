@@ -1,0 +1,6 @@
+type Locale {
+    id: ID!
+    locale: String!
+    languageCode: String!
+    lcidString: String!
+}

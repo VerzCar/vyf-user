@@ -1,0 +1,16 @@
+type Address {
+    id: ID!
+    address: String!
+    city: String!
+    postalCode: String!
+    country: Country!
+    createdAt: Time!
+    updatedAt: Time!
+}
+
+input AddressInput {
+    address: String!
+    city: String!
+    postalCode: String!
+    countryAlphaCode: String!
+}

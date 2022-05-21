@@ -1,0 +1,6 @@
+type Country {
+    id: ID!
+    name: String!
+    alpha2: String!
+    alpha3: String!
+}

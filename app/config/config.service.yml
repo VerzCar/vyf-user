@@ -1,0 +1,113 @@
+# hosts
+hosts:
+  vec: http://localhost:4200/
+  svc:
+    payment: http://paymentsvc:8080
+    sso: http://localhost:1010
+
+# SSO authentification
+sso:
+  realm:
+    name: realm
+    client:
+      id: client
+      secret: secret
+    admin:
+      username: admin
+      password: password
+
+# smtp + email config
+smtp:
+  tls: true
+  host: smtp.strato.de
+  port: 123
+  noReply:
+    user: user@email.de
+    password: pwd
+  account:
+    user: user@email.de
+    password: pwd
+
+emails:
+  enabled: true
+  from:
+    noReply:
+      email: no-reply@vecomentman.de
+      name: "no-reply Vecomentman"
+    vecomentman:
+      email: account@vecomentman.de
+      name: "Vecomentman"
+    company:
+      email: account@vecomentman.de
+      name: "Companies Vecomentman"
+    account:
+      email: account@vecomentman.de
+      name: "Account Vecomentman"
+  test:
+    email: dev@vecomentman.de
+
+# Database
+db:
+  host: db
+  port: 5432
+  name: name
+  user: user
+  password: pwd
+  test:
+    host: db
+    port: 5432
+    name: tname
+    user: user
+    password: pwd
+
+# Redis server
+redis:
+  host: cache
+  port: 6379
+  username: default
+  db: 0
+  timeout: 60
+  password: pwd
+  test:
+    db: 1
+
+# Security
+security:
+  secrets:
+    key: secret
+
+# TTL's
+# given in seconds
+ttl:
+  default: 300 # 5 min.
+  token:
+    default: 300 # 5 min.
+    account:
+      activation: 5400 # 90 min.
+      verification: 604800 # 1 week
+      password: 5400 # 90 min.
+
+# used token definitions
+token:
+  type: bearer
+
+# companies
+companies:
+  brand: vecomentman
+
+user:
+  admin:
+    email: admin@vecomentman.de
+    name: admin
+    password: pwd
+
+# this environment variables are used for testing only
+dockerTest:
+  userSvc:
+    imageName: userservice
+    tag: latest
+    containerName: usersvc-test
+    hostname: usersvc
+    networks:
+      - n_usersvc
+      - traefik-public

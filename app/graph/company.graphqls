@@ -1,0 +1,28 @@
+type Company {
+    id: ID!
+    name: String!
+    address: Address!
+    contact: Contact!
+    owner: User!
+    users: [User!]!
+    brandLogoUrl: String!
+    taxId: String!
+    isVerified: Boolean!
+}
+
+input CompanyCreateInput {
+    name: String!
+    address: AddressInput!
+    contact: ContactInput!
+    taxId: String!
+    paymentId: String!
+}
+
+input CompanyVerifyInput {
+    verificationToken: String!
+}
+
+extend type Mutation {
+    createCompany(company: CompanyCreateInput!): Company!
+    verifyCompany(payload: CompanyVerifyInput!): Company!
+}

@@ -1,0 +1,21 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-text align="left" color="#555" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#eee">
+    <mj-include path="../../layout/header.mjml" />
+    <mj-section background-color="#fff">
+      <mj-column width="70%">
+        <mj-text align="left">
+          <h1 line-height="2.5">Dein Passwort wurde geändert.</h1>
+        </mj-text>
+        <mj-text line-height="1.5">Dein Passwort wurde wie angefordert geändert.</mj-text>
+        <mj-spacer height="15px" />
+        <mj-text line-height="1.5"> Wenn Du nicht selbst dein Kennwort geändert hast, gib uns darüber Bescheid, wir helfen dir dein Konto sicherer zu machen. </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-include path="../../layout/footer.mjml" />
+  </mj-body>
+</mjml>

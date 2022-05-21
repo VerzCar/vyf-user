@@ -1,0 +1,18 @@
+<mj-section>
+  <mj-group>
+    <mj-column>
+      <mj-text>
+        {{ .Header.Company }}
+      </mj-text>
+      <mj-text font-size="18px" line-height="1.2"> {{ .Header.Subject }} </mj-text>
+    </mj-column>
+    <mj-column>
+      <mj-image width="48px" align="right" src="{{ .Header.CompanyLogoSrc }}"></mj-image>
+    </mj-column>
+  </mj-group>
+</mj-section>
+<mj-section>
+  <mj-column>
+    <mj-spacer height="15px" />
+  </mj-column>
+</mj-section>

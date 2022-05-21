@@ -1,0 +1,67 @@
+version: "3.9"
+services:
+
+  db:
+    image: postgres:13
+    volumes:
+      - app-db-data:/var/lib/postgresql/data/pgdata
+    networks:
+      - n_usersvc
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_HOST=${DB_HOST}
+      - POSTGRES_PORT=${DB_PORT}
+      - POSTGRES_NAME=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+
+  cache:
+    image: redis:6.2
+    volumes:
+      - ./cache/redis-data:/var/lib/redis
+    networks:
+      - n_usersvc
+    env_file:
+      - .env
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_DB=${REDIS_DB}
+      - REDIS_TIMEOUT=${REDIS_TIMEOUT}
+      - REDIS_PWD=${REDIS_PASSWORD}
+      - REDIS_REPLICATION_MODE=master
+    command: >
+      redis-server --requirepass ${REDIS_PASSWORD?Variable not set}
+
+  usersvc:
+    container_name: ${DOCKER_SERVICE_NAME?Variable not set}
+    hostname: ${DOCKER_SERVICE_NAME?Variable not set}
+    networks:
+      - n_usersvc
+      - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
+    image: '${DOCKER_IMAGE_SERVICE_NAME?Variable not set}:${TAG-latest}'
+    depends_on:
+      - db
+      - cache
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: service.dockerfile
+    labels:
+      - traefik.enable=true
+      - traefik.constraint-label-stack=${TRAEFIK_PUBLIC_TAG?Variable not set}
+      - traefik.docker.network=${TRAEFIK_PUBLIC_TAG?Variable not set}
+      - traefik.http.routers.${DOCKER_SERVICE_NAME?Variable not set}.rule=Host(`${DOMAIN?Variable not set}`)
+      - traefik.http.routers.${DOCKER_SERVICE_NAME?Variable not set}.tls=true
+      - traefik.http.services.${DOCKER_SERVICE_NAME?Variable not set}.loadbalancer.server.port=8080
+
+volumes:
+  app-db-data:
+
+networks:
+  n_usersvc:
+  traefik-public:
+    external: true
