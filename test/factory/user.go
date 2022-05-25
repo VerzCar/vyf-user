@@ -3,7 +3,7 @@ package factory
 import (
 	"github.com/golang-jwt/jwt/v4"
 	"gitlab.vecomentman.com/libs/sso"
-	"gitlab.vecomentman.com/service/user/api/model"
+	"gitlab.vecomentman.com/vote-your-face/service/user/api/model"
 )
 
 type User struct {

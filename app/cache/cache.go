@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"gitlab.vecomentman.com/libs/logger"
-	"gitlab.vecomentman.com/service/user/app/config"
-	"gitlab.vecomentman.com/service/user/utils"
+	"gitlab.vecomentman.com/vote-your-face/service/user/app/config"
+	"gitlab.vecomentman.com/vote-your-face/service/user/utils"
 )
 
 // Connect the cache database

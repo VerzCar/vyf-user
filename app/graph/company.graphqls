@@ -21,8 +21,3 @@ input CompanyCreateInput {
 input CompanyVerifyInput {
     verificationToken: String!
 }
-
-extend type Mutation {
-    createCompany(company: CompanyCreateInput!): Company!
-    verifyCompany(payload: CompanyVerifyInput!): Company!
-}

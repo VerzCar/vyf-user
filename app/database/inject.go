@@ -2,7 +2,7 @@ package database
 
 import (
 	"gitlab.vecomentman.com/libs/logger"
-	model2 "gitlab.vecomentman.com/service/user/api/model"
+	model2 "gitlab.vecomentman.com/vote-your-face/service/user/api/model"
 	"gorm.io/gorm"
 )
 

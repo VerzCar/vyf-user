@@ -30,7 +30,7 @@ func (e *service) newLayoutData(subject string) Layout {
 
 	companyLogoSrc := "https://static.wixstatic.com/media/847cc7_23ab3dd28e6147369154ca5691f5f2e2~mv2.png/v1/fill/w_72,h_72,al_c,usm_0.66_1.00_0.01/logo-640.png"
 	contactUrl := e.config.Hosts.Vec + "contact"
-	company := e.config.Companies.Brand
+	company := "company"
 	companyUrl := e.config.Hosts.Vec
 	copyright := "Copyright (c) " + strconv.Itoa(time.Now().Year())
 

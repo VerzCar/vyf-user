@@ -3,7 +3,7 @@ package app
 import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/gin-gonic/gin"
-	"gitlab.vecomentman.com/service/user/app/graph/generated"
+	"gitlab.vecomentman.com/vote-your-face/service/user/app/graph/generated"
 )
 
 // GQL defines the Graphql handler

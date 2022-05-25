@@ -3,9 +3,9 @@ package services
 import (
 	"context"
 	"gitlab.vecomentman.com/libs/logger"
-	"gitlab.vecomentman.com/service/user/app/graph/client"
-	appContext "gitlab.vecomentman.com/service/user/app/router/ctx"
-	"gitlab.vecomentman.com/service/user/app/router/header"
+	"gitlab.vecomentman.com/vote-your-face/service/user/app/graph/client"
+	appContext "gitlab.vecomentman.com/vote-your-face/service/user/app/router/ctx"
+	"gitlab.vecomentman.com/vote-your-face/service/user/app/router/header"
 )
 
 type PaymentService interface {

@@ -3,7 +3,7 @@ package cache
 import (
 	"context"
 	"fmt"
-	"gitlab.vecomentman.com/service/user/utils"
+	"gitlab.vecomentman.com/vote-your-face/service/user/utils"
 	"strconv"
 )
 

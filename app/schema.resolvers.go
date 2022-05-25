@@ -6,7 +6,7 @@ package app
 import (
 	"context"
 
-	"gitlab.vecomentman.com/service/user/app/graph/generated"
+	"gitlab.vecomentman.com/vote-your-face/service/user/app/graph/generated"
 )
 
 func (r *mutationResolver) Ping(ctx context.Context) (string, error) {

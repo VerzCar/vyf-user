@@ -1,15 +1,16 @@
-FROM golang:1.17 AS build
+FROM golang:1.18 AS build
 
 # Populate the module cache based on the go.{mod,sum} files.
-COPY ./go.mod ./go.sum src/vecapp/
-WORKDIR src/vecapp
+COPY ./go.mod ./go.sum src/service-app/
+WORKDIR src/service-app
 
 # add workaround to add own repositoriy packages
 RUN git config --global \
 url."https://vecLibsToken:oac9pW1xsTMYbxK4DeYK@gitlab.vecomentman.com/".insteadOf "https://gitlab.vecomentman.com/" && \
 go list -m gitlab.vecomentman.com/libs/logger && \
 go list -m gitlab.vecomentman.com/libs/sso && \
-go list -m gitlab.vecomentman.com/libs/email
+go list -m gitlab.vecomentman.com/libs/email && \
+go list -m gitlab.vecomentman.com/libs/awsx
 
 # Download all dependencies.
 RUN go mod download
@@ -31,11 +32,11 @@ COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=build /go/bin/main .
 
 # copy additional data
-COPY ./app/config/config.service.yml go/src/vecapp/app/config/config.service.yml
-COPY ./app/config/secret.service.yml go/src/vecapp/app/config/secret.service.yml
-COPY ./app/config/config.logger.yml go/src/vecapp/app/config/config.logger.yml
-COPY ./email-templates/dist go/src/vecapp/email-templates/dist
-COPY ./repository/migrations go/src/vecapp/repository/migrations
+COPY ./app/config/config.service.yml go/src/service-app/app/config/config.service.yml
+COPY ./app/config/secret.service.yml go/src/service-app/app/config/secret.service.yml
+COPY ./app/config/config.logger.yml go/src/service-app/app/config/config.logger.yml
+COPY ./email-templates/dist go/src/service-app/email-templates/dist
+COPY ./repository/migrations go/src/service-app/repository/migrations
 
 # start application
 ENTRYPOINT ["/main"]

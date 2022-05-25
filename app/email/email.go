@@ -5,7 +5,7 @@ import (
 	_ "github.com/lib/pq"
 	"gitlab.vecomentman.com/libs/email"
 	"gitlab.vecomentman.com/libs/logger"
-	"gitlab.vecomentman.com/service/user/app/config"
+	"gitlab.vecomentman.com/vote-your-face/service/user/app/config"
 )
 
 type Service interface {

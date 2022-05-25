@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 	"gitlab.vecomentman.com/libs/logger"
-	"gitlab.vecomentman.com/service/user/api/model"
-	"gitlab.vecomentman.com/service/user/app/config"
-	"gitlab.vecomentman.com/service/user/app/email"
-	"gitlab.vecomentman.com/service/user/repository"
-	"gitlab.vecomentman.com/service/user/services"
-	"gitlab.vecomentman.com/service/user/utils"
+	"gitlab.vecomentman.com/vote-your-face/service/user/api/model"
+	"gitlab.vecomentman.com/vote-your-face/service/user/app/config"
+	"gitlab.vecomentman.com/vote-your-face/service/user/app/email"
+	"gitlab.vecomentman.com/vote-your-face/service/user/repository"
+	"gitlab.vecomentman.com/vote-your-face/service/user/services"
+	"gitlab.vecomentman.com/vote-your-face/service/user/utils"
 )
 
 type CompanyService interface {

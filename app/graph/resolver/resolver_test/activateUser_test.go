@@ -3,11 +3,11 @@ package resolver_test
 /*
 import (
 	assertPkg "github.com/stretchr/testify/assert"
-	"gitlab.vecomentman.com/service/user/api/model"
-	"gitlab.vecomentman.com/service/user/app/cache/testcache"
-	"gitlab.vecomentman.com/service/user/app/database/testdb"
-	"gitlab.vecomentman.com/service/user/test/factory"
-	"gitlab.vecomentman.com/service/user/utils/testing/client"
+	"gitlab.vecomentman.com/vote-your-face/service/user/api/model"
+	"gitlab.vecomentman.com/vote-your-face/service/user/app/cache/testcache"
+	"gitlab.vecomentman.com/vote-your-face/service/user/app/database/testdb"
+	"gitlab.vecomentman.com/vote-your-face/service/user/test/factory"
+	"gitlab.vecomentman.com/vote-your-face/service/user/utils/testing/client"
 	"testing"
 )
 

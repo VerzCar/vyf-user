@@ -3,9 +3,9 @@ package app
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"gitlab.vecomentman.com/libs/sso"
-	routerContext "gitlab.vecomentman.com/service/user/app/router/ctx"
-	"gitlab.vecomentman.com/service/user/app/router/header"
+	"gitlab.vecomentman.com/libs/awsx"
+	routerContext "gitlab.vecomentman.com/vote-your-face/service/user/app/router/ctx"
+	"gitlab.vecomentman.com/vote-your-face/service/user/app/router/header"
 	"net/http"
 )
 
@@ -22,7 +22,7 @@ func (s *Server) ginContextToContext() gin.HandlerFunc {
 // If the authentification fails the request will be aborted.
 // Otherwise, the given subject of the token will be saved in the context and
 // the next request served.
-func (s *Server) authGuard(ssoService sso.Service) gin.HandlerFunc {
+func (s *Server) authGuard(authService awsx.AuthService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
 		accessToken, err := header.Authorization(ctx, "Bearer")
@@ -33,7 +33,7 @@ func (s *Server) authGuard(ssoService sso.Service) gin.HandlerFunc {
 			return
 		}
 
-		token, ssoClaims, err := ssoService.DecodeAccessToken(ctx, accessToken)
+		token, err := authService.DecodeAccessToken(ctx, accessToken)
 
 		if err != nil {
 			ctx.String(http.StatusUnauthorized, fmt.Sprintf("error decoding token"))
@@ -41,13 +41,7 @@ func (s *Server) authGuard(ssoService sso.Service) gin.HandlerFunc {
 			return
 		}
 
-		if !token.Valid {
-			ctx.String(http.StatusUnauthorized, fmt.Sprint("token not valid"))
-			ctx.AbortWithStatus(http.StatusUnauthorized)
-			return
-		}
-
-		routerContext.SetSsoClaimsContext(ctx, ssoClaims)
+		routerContext.SetAuthClaimsContext(ctx, token)
 		ctx.Next()
 	}
 }

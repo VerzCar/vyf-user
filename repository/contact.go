@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"gitlab.vecomentman.com/service/user/api/model"
-	"gitlab.vecomentman.com/service/user/validate"
+	"gitlab.vecomentman.com/vote-your-face/service/user/api/model"
+	"gitlab.vecomentman.com/vote-your-face/service/user/validate"
 )
 
 // TransformContactInput transform the input from source src to destination dest
