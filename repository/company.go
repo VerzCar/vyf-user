@@ -3,9 +3,9 @@ package repository
 import (
 	"context"
 	"fmt"
-	"gitlab.vecomentman.com/service/user/api/model"
-	"gitlab.vecomentman.com/service/user/app/database"
-	"gitlab.vecomentman.com/service/user/app/email"
+	"gitlab.vecomentman.com/vote-your-face/service/user/api/model"
+	"gitlab.vecomentman.com/vote-your-face/service/user/app/database"
+	"gitlab.vecomentman.com/vote-your-face/service/user/app/email"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )

@@ -2,8 +2,8 @@ package email_test
 
 import (
 	"gitlab.vecomentman.com/libs/logger"
-	appConfig "gitlab.vecomentman.com/service/user/app/config"
-	"gitlab.vecomentman.com/service/user/utils"
+	appConfig "gitlab.vecomentman.com/vote-your-face/service/user/app/config"
+	"gitlab.vecomentman.com/vote-your-face/service/user/utils"
 	"os"
 	"testing"
 )

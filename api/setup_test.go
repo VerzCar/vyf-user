@@ -4,9 +4,9 @@ import (
 	"context"
 	"gitlab.vecomentman.com/libs/logger"
 	"gitlab.vecomentman.com/libs/sso"
-	appConfig "gitlab.vecomentman.com/service/user/app/config"
-	"gitlab.vecomentman.com/service/user/test/factory"
-	"gitlab.vecomentman.com/service/user/utils"
+	appConfig "gitlab.vecomentman.com/vote-your-face/service/user/app/config"
+	"gitlab.vecomentman.com/vote-your-face/service/user/test/factory"
+	"gitlab.vecomentman.com/vote-your-face/service/user/utils"
 	"os"
 	"testing"
 )

@@ -3,7 +3,7 @@ stages:
 #  - build
 
 test-source:
-  image: golang:1.17
+  image: golang:1.18
   stage: test
   variables:
     POSTGRES_HOST: "db"

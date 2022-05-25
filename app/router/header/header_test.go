@@ -3,7 +3,7 @@ package header_test
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"gitlab.vecomentman.com/service/user/app/router/header"
+	"gitlab.vecomentman.com/vote-your-face/service/user/app/router/header"
 	"net/http"
 	"net/http/httptest"
 	"reflect"

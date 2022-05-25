@@ -34,8 +34,3 @@ input UserUpdateInput {
 extend type Query {
     user: User!
 }
-
-extend type Mutation {
-    createUser(userCreateInput: UserCreateInput!): User!
-    updateUser(user: UserUpdateInput!): User!
-}

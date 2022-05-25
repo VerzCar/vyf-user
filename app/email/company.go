@@ -3,7 +3,7 @@ package email
 import (
 	"fmt"
 	"gitlab.vecomentman.com/libs/email"
-	"gitlab.vecomentman.com/service/user/utils"
+	"gitlab.vecomentman.com/vote-your-face/service/user/utils"
 )
 
 type CompanyVerificationData struct {

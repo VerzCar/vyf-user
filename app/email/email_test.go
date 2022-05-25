@@ -1,7 +1,7 @@
 package email_test
 
 import (
-	"gitlab.vecomentman.com/service/user/app/email"
+	"gitlab.vecomentman.com/vote-your-face/service/user/app/email"
 	"reflect"
 	"testing"
 )

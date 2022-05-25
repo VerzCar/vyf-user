@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"github.com/go-redis/redis/v8"
 	"gitlab.vecomentman.com/libs/logger"
-	"gitlab.vecomentman.com/service/user/app/config"
+	"gitlab.vecomentman.com/vote-your-face/service/user/app/config"
 	"time"
 )
 

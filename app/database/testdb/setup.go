@@ -3,7 +3,7 @@ package testdb
 import (
 	"fmt"
 	"gitlab.vecomentman.com/libs/logger"
-	"gitlab.vecomentman.com/service/user/app/config"
+	"gitlab.vecomentman.com/vote-your-face/service/user/app/config"
 	"gorm.io/gorm"
 )
 

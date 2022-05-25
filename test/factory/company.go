@@ -1,6 +1,6 @@
 package factory
 
-import "gitlab.vecomentman.com/service/user/api/model"
+import "gitlab.vecomentman.com/vote-your-face/service/user/api/model"
 
 type Company struct {
 	MarcosPizza model.Company

@@ -1,7 +1,7 @@
 package factory
 
 import (
-	"gitlab.vecomentman.com/service/user/api/model"
+	"gitlab.vecomentman.com/vote-your-face/service/user/api/model"
 	"time"
 )
 

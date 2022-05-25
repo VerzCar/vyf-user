@@ -5,16 +5,13 @@ hosts:
     payment: http://paymentsvc:8080
     sso: http://localhost:1010
 
-# SSO authentification
-sso:
-  realm:
-    name: realm
-    client:
-      id: client
-      secret: secret
-    admin:
-      username: admin
-      password: password
+# aws
+aws:
+  auth:
+    clientId: clientId
+    userPoolId: poolId
+    awsDefaultRegion: eu-central-1
+    clientSecret: secret
 
 # smtp + email config
 smtp:
@@ -48,7 +45,7 @@ emails:
 
 # Database
 db:
-  host: db
+  host: publicPostgresDb
   port: 5432
   name: name
   user: user
@@ -90,10 +87,6 @@ ttl:
 # used token definitions
 token:
   type: bearer
-
-# companies
-companies:
-  brand: vecomentman
 
 user:
   admin:

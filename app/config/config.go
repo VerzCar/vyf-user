@@ -11,17 +11,12 @@ import (
 type Config struct {
 	Environment string
 
-	Sso struct {
-		Realm struct {
-			Name   string
-			Client struct {
-				Id     string
-				Secret string
-			}
-			Admin struct {
-				Username string
-				Password string
-			}
+	Aws struct {
+		Auth struct {
+			ClientId         string
+			UserPoolId       string
+			AwsDefaultRegion string
+			ClientSecret     string
 		}
 	}
 
@@ -119,10 +114,6 @@ type Config struct {
 				Password     uint
 			}
 		}
-	}
-
-	Companies struct {
-		Brand string
 	}
 
 	User struct {
