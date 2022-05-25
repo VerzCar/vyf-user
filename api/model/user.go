@@ -13,6 +13,7 @@ import (
 type User struct {
 	ID         int64         `json:"id" gorm:"primary_key;index;"`
 	IdentityID string        `json:"identityId" gorm:"type:varchar(50);unique;not null"`
+	Username   string        `json:"username" gorm:"type:varchar(40);unique;not null"`
 	FirstName  string        `json:"firstName" gorm:"type:varchar(50)"`
 	LastName   string        `json:"LastName" gorm:"type:varchar(50)"`
 	Gender     Gender        `json:"gender" gorm:"type:gender;not null;default:X"`
@@ -22,30 +23,21 @@ type User struct {
 	Address    *Address      `json:"address" gorm:"constraint:OnDelete:CASCADE;"`
 	ContactID  sql.NullInt64 `json:"contactId"`
 	Contact    *Contact      `json:"contact" gorm:"constraint:OnDelete:CASCADE;"`
-	AvatarUrl  string        `json:"avatarUrl"`
-	CompanyID  *int64        `json:"companyId"`
+	BioID      sql.NullInt64 `json:"bioId"`
+	Bio        *Bio          `json:"bio" gorm:"constraint:OnDelete:CASCADE;"`
 	CreatedAt  time.Time     `json:"createdAt" gorm:"autoCreateTime;"`
 	UpdatedAt  time.Time     `json:"updatedAt" gorm:"autoUpdateTime;"`
 }
 
-type UserCreateInput struct {
-	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required,gt=0"`
-}
-
 type UserUpdateInput struct {
-	FirstName *string         `json:"firstName" validate:"omitempty,gt=0,lte=50"`
-	LastName  *string         `json:"lastName" validate:"omitempty,gt=0,lte=50"`
-	Gender    *Gender         `json:"gender"`
-	Locale    *string         `json:"locale" validate:"omitempty,bcp47_language_tag"`
-	AvatarURL *string         `json:"avatarUrl" validate:"omitempty,url"`
-	Address   *AddressInput   `json:"address" validate:"omitempty"`
-	Contact   *ContactInputXs `json:"contact" validate:"omitempty"`
-}
-
-type UserResetPasswordInput struct {
-	ResetPasswordToken string `json:"resetPasswordToken"`
-	NewPassword        string `json:"newPassword"`
+	FirstName *string       `json:"firstName" validate:"omitempty,gt=0,lte=50"`
+	LastName  *string       `json:"lastName" validate:"omitempty,gt=0,lte=50"`
+	Username  *string       `json:"username" validate:"omitempty,gt=0,lte=40"`
+	Gender    *Gender       `json:"gender"`
+	Locale    *string       `json:"locale" validate:"omitempty,bcp47_language_tag"`
+	Address   *AddressInput `json:"address" validate:"omitempty"`
+	Contact   *ContactInput `json:"contact" validate:"omitempty"`
+	Bio       *BioInput     `json:"bio" validate:"omitempty"`
 }
 
 type Gender string

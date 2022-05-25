@@ -2,10 +2,10 @@ package api
 
 import (
 	"context"
-	"fmt"
 	"gitlab.vecomentman.com/libs/logger"
 	"gitlab.vecomentman.com/vote-your-face/service/user/api/model"
 	"gitlab.vecomentman.com/vote-your-face/service/user/app/config"
+	"gitlab.vecomentman.com/vote-your-face/service/user/app/database"
 	emailSvc "gitlab.vecomentman.com/vote-your-face/service/user/app/email"
 	routerContext "gitlab.vecomentman.com/vote-your-face/service/user/app/router/ctx"
 )
@@ -71,16 +71,26 @@ func (u *userService) User(
 		return nil, err
 	}
 
-	fmt.Println(authClaims.Subject)
+	user, err := u.storage.UserByIdentityId(authClaims.Subject)
 
-	//user, err := u.storage.UserByIdentityId(ssoClaims.Subject)
-	//
-	//if err != nil {
-	//	u.log.Infof("could not query user for id: %s, error: %s", ssoClaims.Subject, err)
-	//	return nil, err
-	//}
+	switch {
+	case err != nil && !database.RecordNotFound(err):
+		u.log.Infof("could not query user for id: %s, error: %s", authClaims.Subject, err)
+		return nil, err
+	case database.RecordNotFound(err):
+		newUser := &model.User{
+			IdentityID: authClaims.Subject,
+			Username:   "",
+		}
+		user, err := u.storage.CreateNewUser(newUser)
 
-	user := &model.User{IdentityID: "yeah", FirstName: "Carlo"}
+		if err != nil {
+			u.log.Infof("could not create user for id: %s, error: %s", authClaims.Subject, err)
+			return nil, err
+		}
+
+		return user, nil
+	}
 
 	return user, nil
 }

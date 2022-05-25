@@ -870,16 +870,6 @@ github.com/yuin/goldmark v1.3.5/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1
 github.com/yuin/goldmark v1.4.1/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
 github.com/zenazn/goji v0.9.0/go.mod h1:7S9M489iMyHBNxwZnk9/EHS098H4/F6TATF2mIxtB1Q=
 gitlab.com/nyarla/go-crypt v0.0.0-20160106005555-d9a5dc2b789b/go.mod h1:T3BPAOm2cqquPa0MKWeNkmOM5RQsRhkrwMWonFMN7fE=
-gitlab.vecomentman.com/libs/awsx v1.0.0 h1:7uoYus9CHqERcD6Xjmurv4rhOLwoAVxbb7G145nB+4Q=
-gitlab.vecomentman.com/libs/awsx v1.0.0/go.mod h1:YZ7j8DjhU+baF1+k2VnrWD1CigwpZVor9N6iICNhZdg=
-gitlab.vecomentman.com/libs/awsx v1.1.0 h1:GBTLCMxn5gWFRQ8J+gTKT4up+aB+YNvirNu9EzjbSOo=
-gitlab.vecomentman.com/libs/awsx v1.1.0/go.mod h1:YZ7j8DjhU+baF1+k2VnrWD1CigwpZVor9N6iICNhZdg=
-gitlab.vecomentman.com/libs/awsx v1.2.0 h1:8yYQil/g5v11OyM6z3p/vz8FqBP+1i+OW5uADdBRUJk=
-gitlab.vecomentman.com/libs/awsx v1.2.0/go.mod h1:YZ7j8DjhU+baF1+k2VnrWD1CigwpZVor9N6iICNhZdg=
-gitlab.vecomentman.com/libs/awsx v1.3.0 h1:M2mui3ymv+W2me6dgXVHGT86ZFHnNs9NcCVCLd64d3I=
-gitlab.vecomentman.com/libs/awsx v1.3.0/go.mod h1:YZ7j8DjhU+baF1+k2VnrWD1CigwpZVor9N6iICNhZdg=
-gitlab.vecomentman.com/libs/awsx v1.4.0 h1:MuDpQtx3LgC7Hs9q2jXkQL6SNxnU5yZDQKoM2lmvfDc=
-gitlab.vecomentman.com/libs/awsx v1.4.0/go.mod h1:YZ7j8DjhU+baF1+k2VnrWD1CigwpZVor9N6iICNhZdg=
 gitlab.vecomentman.com/libs/awsx v1.4.1 h1:YLAKcOM3Wg/Pn4LnGxmt0wKXwZw7bU1s7kooR/q6Gow=
 gitlab.vecomentman.com/libs/awsx v1.4.1/go.mod h1:YZ7j8DjhU+baF1+k2VnrWD1CigwpZVor9N6iICNhZdg=
 gitlab.vecomentman.com/libs/email v1.0.0 h1:FlsbAedJzDm2dbuWsH+hzGc8C0qHW95cDud4g56wbEM=

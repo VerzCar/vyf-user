@@ -25,32 +25,5 @@ func InjectInitData(db *gorm.DB, log logger.Logger) {
 		log.Fatalf("Creation failed: %s", err)
 	}
 
-	users := []*model2.User{user}
-
-	company := &model2.Company{
-		Name: "Marcos Pizza",
-		Address: &model2.Address{
-			Address:    "Brienner Str. 49",
-			City:       "München",
-			PostalCode: "80333",
-			Country:    &model2.Country{ID: 65},
-		},
-		Contact: &model2.Contact{
-			Email:               "dev.marcos-pizza@vecomentman.de",
-			PhoneNumber:         "08938889733",
-			PhoneNumberCountry:  &model2.Country{ID: 65},
-			PhoneNumber2:        "08938889755",
-			PhoneNumber2Country: &model2.Country{ID: 65},
-			Web:                 "https://marcospizza.de",
-		},
-		TaxID: "DE123456789",
-		Owner: user,
-		Users: users,
-	}
-
-	if err := db.Create(company).Error; err != nil {
-		log.Fatalf("Creation failed: %s", err)
-	}
-
 	log.Info("initial data injected.")
 }

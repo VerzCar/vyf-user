@@ -28,11 +28,3 @@ type ContactInput struct {
 	PhoneNumber2CountryAlphaCode *string `json:"phoneNumber2CountryAlphaCode" validate:"omitempty,iso3166_1_alpha2"`
 	Web                          *string `json:"web" validate:"omitempty,url"`
 }
-
-type ContactInputXs struct {
-	PhoneNumber                  string  `json:"phoneNumber" validate:"required,numeric,lte=20"`
-	PhoneNumberCountryAlphaCode  string  `json:"phoneNumberCountryAlphaCode" validate:"required,iso3166_1_alpha2"`
-	PhoneNumber2                 *string `json:"phoneNumber2" validate:"omitempty,numeric,lte=20"`
-	PhoneNumber2CountryAlphaCode *string `json:"phoneNumber2CountryAlphaCode" validate:"omitempty,iso3166_1_alpha2"`
-	Web                          *string `json:"web" validate:"omitempty,url"`
-}

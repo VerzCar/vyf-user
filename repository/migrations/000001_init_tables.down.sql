@@ -1,9 +1,8 @@
 BEGIN;
 
-alter table companies
-    drop constraint fk_companies_owner cascade;
-
 drop table users cascade;
+
+drop table bios cascade;
 
 drop table locales cascade;
 

@@ -1,0 +1,8 @@
+type Bio {
+    id: ID!
+    description: String!
+}
+
+input BioInput {
+    description: String!
+}

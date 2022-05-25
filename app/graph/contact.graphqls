@@ -18,11 +18,3 @@ input ContactInput {
     phoneNumber2CountryAlphaCode: String
     web: String
 }
-
-input ContactInputXs {
-    phoneNumber: String!
-    phoneNumberCountryAlphaCode: String!
-    phoneNumber2: String
-    phoneNumber2CountryAlphaCode: String
-    web: String
-}
