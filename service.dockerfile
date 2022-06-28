@@ -8,7 +8,6 @@ WORKDIR src/service-app
 RUN git config --global \
 url."https://vecLibsToken:oac9pW1xsTMYbxK4DeYK@gitlab.vecomentman.com/".insteadOf "https://gitlab.vecomentman.com/" && \
 go list -m gitlab.vecomentman.com/libs/logger && \
-go list -m gitlab.vecomentman.com/libs/sso && \
 go list -m gitlab.vecomentman.com/libs/email && \
 go list -m gitlab.vecomentman.com/libs/awsx
 

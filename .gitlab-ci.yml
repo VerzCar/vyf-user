@@ -1,6 +1,6 @@
 stages:
-  - test
-#  - build
+  - build
+# - test
 
 test-source:
   image: golang:1.18
@@ -34,10 +34,10 @@ test-source:
     - go test -cover -p 1 ./...
 
 sonarqube-check:
+  stage: test
   image:
     name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [""]
-  stage: test
+    entrypoint: [ "" ]
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
@@ -52,26 +52,26 @@ sonarqube-check:
   allow_failure: false
 
 
-#build-image-push:
-#  stage: build
-#  tags:
-#    - shell
-#  before_script:
-#    - docker info
-#    - mkdir -p $HOME/.docker
-#    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
-#  # Default branch leaves tag empty (= latest tag)
-#  # All other branches are tagged with the escaped branch name (commit ref slug)
-#  script:
-#    - |
-#      if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
-#        tag=""
-#        echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
-#      else
-#        tag=":$CI_COMMIT_REF_SLUG"
-#        echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
-#      fi
-#    # copy secret file into build layer
-#    - cp $SECRETS_USER_SVC $(pwd)/app/config/secret.service.yml
-#    - docker build --pull -t "$DO_DOCKER_REGISTRY/$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME${tag}" -f service.dockerfile .
-#    - docker push "$DO_DOCKER_REGISTRY/$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME${tag}"
+build-image-push:
+  stage: build
+  tags:
+    - shell
+  before_script:
+    - docker info
+    - mkdir -p $HOME/.docker
+    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+  # Default branch leaves tag empty (= latest tag)
+  # All other branches are tagged with the escaped branch name (commit ref slug)
+  script:
+    - |
+      if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
+        tag=""
+        echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
+        cp $SECRETS_USER_SVC $(pwd)/app/config/secret.service.yml
+      else
+        tag=":$CI_COMMIT_REF_SLUG"
+        echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
+        cp $SECRETS_USER_SVC_DEV $(pwd)/app/config/secret.service.yml
+      fi
+    - docker build --pull -t "$DO_DOCKER_REGISTRY/$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME${tag}" -f service.dockerfile .
+    - docker push "$DO_DOCKER_REGISTRY/$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME${tag}"

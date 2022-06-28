@@ -34,7 +34,6 @@ require (
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	gitlab.vecomentman.com/libs/email v1.0.0
 	gitlab.vecomentman.com/libs/logger v1.0.0
-	gitlab.vecomentman.com/libs/sso v1.2.0
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
 	golang.org/x/crypto v0.0.0-20220427172511-eb4f295cb31f // indirect

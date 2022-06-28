@@ -11,7 +11,6 @@ import (
 type Service interface {
 	SendUserResetPasswordDone(data *UserResetPasswordDoneData) error
 	SendUserResetPassword(data *UserResetPasswordData) error
-	SendCompanyVerification(data *CompanyVerificationData) error
 }
 
 type service struct {
