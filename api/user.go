@@ -25,21 +25,8 @@ type UserRepository interface {
 	TransformContactInput(src *model.ContactInput, dest *model.Contact) error
 }
 
-type UserCache interface {
-	StartResetUserPassword(
-		ctx context.Context,
-		passwordActivationKey string,
-		userId string,
-	) error
-	UserInPasswordReset(
-		ctx context.Context,
-		resetPasswordKey string,
-	) (string, error)
-}
-
 type userService struct {
 	storage      UserRepository
-	cache        UserCache
 	emailService emailSvc.Service
 	config       *config.Config
 	log          logger.Logger
@@ -47,14 +34,12 @@ type userService struct {
 
 func NewUserService(
 	userRepo UserRepository,
-	cache UserCache,
 	emailService emailSvc.Service,
 	config *config.Config,
 	log logger.Logger,
 ) UserService {
 	return &userService{
 		storage:      userRepo,
-		cache:        cache,
 		emailService: emailService,
 		config:       config,
 		log:          log,

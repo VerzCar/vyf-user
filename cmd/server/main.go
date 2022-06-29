@@ -7,7 +7,6 @@ import (
 	"gitlab.vecomentman.com/libs/logger"
 	"gitlab.vecomentman.com/vote-your-face/service/user/api"
 	"gitlab.vecomentman.com/vote-your-face/service/user/app"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/cache"
 	"gitlab.vecomentman.com/vote-your-face/service/user/app/config"
 	"gitlab.vecomentman.com/vote-your-face/service/user/app/database"
 	"gitlab.vecomentman.com/vote-your-face/service/user/app/email"
@@ -37,8 +36,6 @@ func run() error {
 
 	db := database.Connect(log, envConfig)
 
-	redisCache := cache.Connect(log, envConfig)
-
 	storage := repository.NewStorage(db, envConfig, log)
 
 	sqlDb, _ := db.DB()
@@ -47,8 +44,6 @@ func run() error {
 	if err != nil {
 		return err
 	}
-
-	redis := cache.NewRedisCache(redisCache, envConfig, log)
 
 	// initialize auth service
 	authService, err := awsx.NewAuthService(
@@ -70,7 +65,7 @@ func run() error {
 	}
 
 	// initialize api services
-	userService := api.NewUserService(storage, redis, emailService, envConfig, log)
+	userService := api.NewUserService(storage, emailService, envConfig, log)
 
 	validate = validator.New()
 
