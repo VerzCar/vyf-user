@@ -63,16 +63,15 @@ build-image-push:
   # Default branch leaves tag empty (= latest tag)
   # All other branches are tagged with the escaped branch name (commit ref slug)
   script:
-    - ENVIRONMENT="production"
     - |
       if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
         tag=""
         echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
-        cp $SECRETS_USER_SVC_DEV $(pwd)/app/config/secret.service.yml
+        cp $SECRETS_SVC_DEV $(pwd)/app/config/secret.service.yml
       else
         tag=":$CI_COMMIT_REF_SLUG"
         echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
-        cp $SECRETS_USER_SVC $(pwd)/app/config/secret.service.yml
+        cp $SECRETS_SVC $(pwd)/app/config/secret.service.yml
       fi
     - docker build --pull -t "$DO_DOCKER_REGISTRY/$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME${tag}" -f service.dockerfile .
     - docker push "$DO_DOCKER_REGISTRY/$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME${tag}"
