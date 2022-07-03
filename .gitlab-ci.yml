@@ -86,5 +86,5 @@ deploy:
     entrypoint: [ '' ]
   script:
     - kubectl config get-contexts
-    - kubectl config use-context do-fra1-vyf-cluster-dev:vyf-k8s-dev
+    - kubectl config use-context vote-your-face/service/user:vyf-k8s-dev
     - kubectl get pods
