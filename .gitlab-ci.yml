@@ -1,6 +1,8 @@
 stages:
+  #  - test
   - build
-# - test
+  - deploy
+
 
 #test-source:
 #  image: golang:1.18
@@ -75,3 +77,14 @@ build-image-push:
       fi
     - docker build --pull -t "$DO_DOCKER_REGISTRY/$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME${tag}" -f service.dockerfile .
     - docker push "$DO_DOCKER_REGISTRY/$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME${tag}"
+
+# deploy stage
+deploy:
+  stage: build
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: [ '' ]
+  script:
+    - kubectl config get-contexts
+    - kubectl config use-context do-fra1-vyf-cluster-dev:vyf-k8s-dev
+    - kubectl get pods
