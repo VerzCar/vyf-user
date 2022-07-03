@@ -88,3 +88,5 @@ deploy:
     - kubectl config get-contexts
     - kubectl config use-context vote-your-face/service/user:vyf-k8s-dev
     - kubectl get pods
+    - kubectl apply -f service-manifest.yaml
+    - kubectl rollout status deployment/user-service
