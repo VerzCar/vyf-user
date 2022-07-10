@@ -876,8 +876,8 @@ gitlab.vecomentman.com/libs/email v1.0.0 h1:FlsbAedJzDm2dbuWsH+hzGc8C0qHW95cDud4
 gitlab.vecomentman.com/libs/email v1.0.0/go.mod h1:x+Y2G0xB2wLnEDT5ymEAoTmQXFlnWFTqGCcwUnSgmQU=
 gitlab.vecomentman.com/libs/logger v1.0.0 h1:hyayBUuVZ2eX0lal4BB2fIrizx+YXXgD678JeKsuknA=
 gitlab.vecomentman.com/libs/logger v1.0.0/go.mod h1:/FWxwaYf+U7m/3R+IXMpS+S8hyO1QQBS2P1g3XjnwLU=
-gitlab.vecomentman.com/libs/sso v1.2.0 h1:inUlo2ESG08kG/45+8cTaHqGJ172SHmkb4mZivgTEuM=
-gitlab.vecomentman.com/libs/sso v1.2.0/go.mod h1:4rRi1faXaGRWHLhGQLf/FQO8B3RVkMET8qfE6XwMr3E=
+gitlab.vecomentman.com/libs/sso v1.3.0 h1:pQNriLZYmmvqviWU/olD0gVxCOHAz+Rci0tlSKkJbxs=
+gitlab.vecomentman.com/libs/sso v1.3.0/go.mod h1:4rRi1faXaGRWHLhGQLf/FQO8B3RVkMET8qfE6XwMr3E=
 go.etcd.io/bbolt v1.3.2/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.etcd.io/etcd/api/v3 v3.5.1/go.mod h1:cbVKeC6lCfl7j/8jBhAK6aIYO9XOjdptoxU/nLQcPvs=
 go.etcd.io/etcd/client/pkg/v3 v3.5.1/go.mod h1:IJHfcCEKxYu1Os13ZdwCwIUTUVGYTSAM3YSwc9/Ac1g=

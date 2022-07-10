@@ -1,0 +1,12 @@
+type Profile {
+    id: ID!
+    bio: String!
+    whyVoteMe: String!
+    imageSrc: String!
+}
+
+input ProfileInput {
+    bio: String
+    whyVoteMe: String
+    imageSrc: String
+}

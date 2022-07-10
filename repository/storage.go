@@ -18,8 +18,6 @@ import (
 type Storage interface {
 	RunMigrationsUp(db *sql.DB) error
 	RunMigrationsDown(db *sql.DB) error
-	UserById(id int64) (*model.User, error)
-	UserByIdentityId(id string) (*model.User, error)
 	CountryById(id int64) (*model.Country, error)
 	CountryByAlpha2(alpha2 string) (*model.Country, error)
 	LocaleByLcidString(lcid string) (*model.Locale, error)
@@ -27,6 +25,8 @@ type Storage interface {
 	TransformContactInput(src *model.ContactInput, dest *model.Contact) error
 	CreateNewUser(user *model.User) (*model.User, error)
 	UpdateUser(user *model.User) (*model.User, error)
+	UserById(id int64) (*model.User, error)
+	UserByIdentityId(id string) (*model.User, error)
 }
 
 type storage struct {

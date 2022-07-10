@@ -23,8 +23,8 @@ type User struct {
 	Address    *Address      `json:"address" gorm:"constraint:OnDelete:CASCADE;"`
 	ContactID  sql.NullInt64 `json:"contactId"`
 	Contact    *Contact      `json:"contact" gorm:"constraint:OnDelete:CASCADE;"`
-	BioID      sql.NullInt64 `json:"bioId"`
-	Bio        *Bio          `json:"bio" gorm:"constraint:OnDelete:CASCADE;"`
+	ProfileID  sql.NullInt64 `json:"profileId"`
+	Profile    *Profile      `json:"profile" gorm:"constraint:OnDelete:CASCADE;"`
 	CreatedAt  time.Time     `json:"createdAt" gorm:"autoCreateTime;"`
 	UpdatedAt  time.Time     `json:"updatedAt" gorm:"autoUpdateTime;"`
 }
@@ -37,7 +37,7 @@ type UserUpdateInput struct {
 	Locale    *string       `json:"locale" validate:"omitempty,bcp47_language_tag"`
 	Address   *AddressInput `json:"address" validate:"omitempty"`
 	Contact   *ContactInput `json:"contact" validate:"omitempty"`
-	Bio       *BioInput     `json:"bio" validate:"omitempty"`
+	Profile   *ProfileInput `json:"profile" validate:"omitempty"`
 }
 
 type Gender string

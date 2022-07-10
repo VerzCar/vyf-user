@@ -2,7 +2,7 @@ BEGIN;
 
 drop table users cascade;
 
-drop table bios cascade;
+drop table profiles cascade;
 
 drop table locales cascade;
 

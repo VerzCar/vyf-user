@@ -98,18 +98,20 @@ create table locales
 create index idx_locales_id
     on locales (id);
 
-create table bios
+create table profiles
 (
     id          bigserial
-        constraint bios_pkey
+        constraint profiles_pkey
             primary key,
-    description varchar(600) not null,
+    bio         varchar(200) not null,
+    why_vote_me varchar(50)  not null,
+    image_src   text         not null,
     created_at  timestamp with time zone default CURRENT_TIMESTAMP,
     updated_at  timestamp with time zone default CURRENT_TIMESTAMP
 );
 
-create index idx_bios_id
-    on bios (id);
+create index idx_profiles_id
+    on profiles (id);
 
 create table users
 (
@@ -133,9 +135,9 @@ create table users
         constraint fk_users_contact
             references contacts
             on delete cascade,
-    bio_id      bigint
-        constraint fk_users_bio
-            references bios
+    profile_id  bigint
+        constraint fk_users_profile
+            references profiles
             on delete cascade,
     created_at  timestamp with time zone,
     updated_at  timestamp with time zone

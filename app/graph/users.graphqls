@@ -13,7 +13,7 @@ type User {
     locale: Locale
     address: Address
     contact: Contact
-    bio: Bio
+    profile: Profile
 }
 
 input UserUpdateInput {
@@ -24,7 +24,7 @@ input UserUpdateInput {
     locale: String
     address: AddressInput
     contact: ContactInput
-    bio: BioInput
+    profile: ProfileInput
 }
 
 extend type Query {

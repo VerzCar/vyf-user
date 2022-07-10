@@ -103,7 +103,10 @@ require (
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
 
-require gitlab.vecomentman.com/libs/awsx v1.4.1
+require (
+	gitlab.vecomentman.com/libs/awsx v1.4.1
+	gitlab.vecomentman.com/libs/sso v1.3.0
+)
 
 require (
 	github.com/aws/aws-sdk-go-v2 v1.16.4 // indirect
