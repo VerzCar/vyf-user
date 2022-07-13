@@ -3,6 +3,7 @@ package repository
 import (
 	"gitlab.vecomentman.com/vote-your-face/service/user/api/model"
 	"gitlab.vecomentman.com/vote-your-face/service/user/app/database"
+	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
 
@@ -57,7 +58,7 @@ func (s *storage) CreateNewUser(user *model.User) (*model.User, error) {
 
 // UpdateUser update user based on given user model
 func (s *storage) UpdateUser(user *model.User) (*model.User, error) {
-	if err := s.db.Save(user).Error; err != nil {
+	if err := s.db.Session(&gorm.Session{FullSaveAssociations: true}).Updates(user).Error; err != nil {
 		s.log.Errorf("error updating user: %s", err)
 		return nil, err
 	}
