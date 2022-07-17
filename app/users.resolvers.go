@@ -5,6 +5,7 @@ package app
 
 import (
 	"context"
+
 	"github.com/vektah/gqlparser/v2/gqlerror"
 	"gitlab.vecomentman.com/vote-your-face/service/user/api/model"
 )

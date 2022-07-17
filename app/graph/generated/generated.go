@@ -99,15 +99,16 @@ type ComplexityRoot struct {
 	}
 
 	User struct {
-		Address   func(childComplexity int) int
-		Contact   func(childComplexity int) int
-		FirstName func(childComplexity int) int
-		Gender    func(childComplexity int) int
-		ID        func(childComplexity int) int
-		LastName  func(childComplexity int) int
-		Locale    func(childComplexity int) int
-		Profile   func(childComplexity int) int
-		Username  func(childComplexity int) int
+		Address    func(childComplexity int) int
+		Contact    func(childComplexity int) int
+		FirstName  func(childComplexity int) int
+		Gender     func(childComplexity int) int
+		ID         func(childComplexity int) int
+		IdentityID func(childComplexity int) int
+		LastName   func(childComplexity int) int
+		Locale     func(childComplexity int) int
+		Profile    func(childComplexity int) int
+		Username   func(childComplexity int) int
 	}
 }
 
@@ -399,6 +400,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.ID(childComplexity), true
 
+	case "User.identityId":
+		if e.complexity.User.IdentityID == nil {
+			break
+		}
+
+		return e.complexity.User.IdentityID(childComplexity), true
+
 	case "User.lastName":
 		if e.complexity.User.LastName == nil {
 			break
@@ -576,6 +584,7 @@ type Mutation {
 
 type User {
     id: ID!
+    identityId: String!
     username: String
     firstName: String
     lastName: String
@@ -1850,6 +1859,8 @@ func (ec *executionContext) fieldContext_Mutation_updateUser(ctx context.Context
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_User_id(ctx, field)
+			case "identityId":
+				return ec.fieldContext_User_identityId(ctx, field)
 			case "username":
 				return ec.fieldContext_User_username(ctx, field)
 			case "firstName":
@@ -2145,6 +2156,8 @@ func (ec *executionContext) fieldContext_Query_user(ctx context.Context, field g
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_User_id(ctx, field)
+			case "identityId":
+				return ec.fieldContext_User_identityId(ctx, field)
 			case "username":
 				return ec.fieldContext_User_username(ctx, field)
 			case "firstName":
@@ -2336,6 +2349,50 @@ func (ec *executionContext) fieldContext_User_id(ctx context.Context, field grap
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _User_identityId(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_User_identityId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IdentityID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_User_identityId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -5184,6 +5241,13 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 		case "id":
 
 			out.Values[i] = ec._User_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "identityId":
+
+			out.Values[i] = ec._User_identityId(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
