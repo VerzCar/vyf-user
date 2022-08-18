@@ -29,7 +29,7 @@ input UserUpdateInput {
 }
 
 extend type Query {
-    user: User!
+    user(identityId: String): User!
 }
 
 extend type Mutation {

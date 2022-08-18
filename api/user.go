@@ -14,6 +14,7 @@ import (
 type UserService interface {
 	User(
 		ctx context.Context,
+		identityId *string,
 	) (*model.User, error)
 	UpdateUser(
 		ctx context.Context,
@@ -51,8 +52,12 @@ func NewUserService(
 	}
 }
 
+// User from the user repository.
+// Gets the user if it exists. If it does not exist the user will be created the first time.
+// If the identityId is provided the queried user will be returned if exists.
 func (u *userService) User(
 	ctx context.Context,
+	identityId *string,
 ) (*model.User, error) {
 	authClaims, err := routerContext.ContextToAuthClaims(ctx)
 
@@ -61,25 +66,38 @@ func (u *userService) User(
 		return nil, err
 	}
 
-	user, err := u.storage.UserByIdentityId(authClaims.Subject)
+	var queryIdentityId string
+	isQueryingItself := identityId == nil
+
+	if isQueryingItself {
+		queryIdentityId = authClaims.Subject
+	} else {
+		queryIdentityId = *identityId
+	}
+
+	user, err := u.storage.UserByIdentityId(queryIdentityId)
 
 	switch {
 	case err != nil && !database.RecordNotFound(err):
-		u.log.Infof("could not query user for id: %s, error: %s", authClaims.Subject, err)
+		u.log.Infof("could not query user for id: %s, error: %s", queryIdentityId, err)
 		return nil, err
-	case database.RecordNotFound(err):
+	case database.RecordNotFound(err) && isQueryingItself:
 		newUser := &model.User{
-			IdentityID: authClaims.Subject,
-			Username:   "",
+			IdentityID: queryIdentityId,
+			Username:   authClaims.Subject,
+			Profile:    &model.Profile{},
 		}
 		user, err := u.storage.CreateNewUser(newUser)
 
 		if err != nil {
-			u.log.Infof("could not create user for id: %s, error: %s", authClaims.Subject, err)
+			u.log.Infof("could not create user for id: %s, error: %s", queryIdentityId, err)
 			return nil, err
 		}
 
 		return user, nil
+	case database.RecordNotFound(err):
+		u.log.Infof("could not query user for id: %s, error: %s", queryIdentityId, err)
+		return nil, err
 	}
 
 	return user, nil
@@ -89,7 +107,7 @@ func (u *userService) UpdateUser(
 	ctx context.Context,
 	userInput *model.UserUpdateInput,
 ) (*model.User, error) {
-	user, err := u.User(ctx)
+	user, err := u.User(ctx, nil)
 
 	if err != nil {
 		return nil, err

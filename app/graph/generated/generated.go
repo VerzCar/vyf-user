@@ -87,15 +87,16 @@ type ComplexityRoot struct {
 	}
 
 	Profile struct {
-		Bio       func(childComplexity int) int
-		ID        func(childComplexity int) int
-		ImageSrc  func(childComplexity int) int
-		WhyVoteMe func(childComplexity int) int
+		Bio                    func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		ImagePlaceholderColors func(childComplexity int) int
+		ImageSrc               func(childComplexity int) int
+		WhyVoteMe              func(childComplexity int) int
 	}
 
 	Query struct {
 		Ping func(childComplexity int) int
-		User func(childComplexity int) int
+		User func(childComplexity int, identityID *string) int
 	}
 
 	User struct {
@@ -118,7 +119,7 @@ type MutationResolver interface {
 }
 type QueryResolver interface {
 	Ping(ctx context.Context) (string, error)
-	User(ctx context.Context) (*model.User, error)
+	User(ctx context.Context, identityID *string) (*model.User, error)
 }
 
 type executableSchema struct {
@@ -337,6 +338,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Profile.ID(childComplexity), true
 
+	case "Profile.imagePlaceholderColors":
+		if e.complexity.Profile.ImagePlaceholderColors == nil {
+			break
+		}
+
+		return e.complexity.Profile.ImagePlaceholderColors(childComplexity), true
+
 	case "Profile.imageSrc":
 		if e.complexity.Profile.ImageSrc == nil {
 			break
@@ -363,7 +371,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.User(childComplexity), true
+		args, err := ec.field_Query_user_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.User(childComplexity, args["identityId"].(*string)), true
 
 	case "User.address":
 		if e.complexity.User.Address == nil {
@@ -560,6 +573,7 @@ input ContactInput {
     bio: String!
     whyVoteMe: String!
     imageSrc: String!
+    imagePlaceholderColors: String!
 }
 
 input ProfileInput {
@@ -607,7 +621,7 @@ input UserUpdateInput {
 }
 
 extend type Query {
-    user: User!
+    user(identityId: String): User!
 }
 
 extend type Mutation {
@@ -647,6 +661,21 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		}
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_user_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["identityId"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("identityId"))
+		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["identityId"] = arg0
 	return args, nil
 }
 
@@ -2071,6 +2100,50 @@ func (ec *executionContext) fieldContext_Profile_imageSrc(ctx context.Context, f
 	return fc, nil
 }
 
+func (ec *executionContext) _Profile_imagePlaceholderColors(ctx context.Context, field graphql.CollectedField, obj *model.Profile) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Profile_imagePlaceholderColors(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ImagePlaceholderColors, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Profile_imagePlaceholderColors(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Profile",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_ping(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_ping(ctx, field)
 	if err != nil {
@@ -2129,7 +2202,7 @@ func (ec *executionContext) _Query_user(ctx context.Context, field graphql.Colle
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().User(rctx)
+		return ec.resolvers.Query().User(rctx, fc.Args["identityId"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2177,6 +2250,17 @@ func (ec *executionContext) fieldContext_Query_user(ctx context.Context, field g
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_user_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
 	}
 	return fc, nil
 }
@@ -2775,6 +2859,8 @@ func (ec *executionContext) fieldContext_User_profile(ctx context.Context, field
 				return ec.fieldContext_Profile_whyVoteMe(ctx, field)
 			case "imageSrc":
 				return ec.fieldContext_Profile_imageSrc(ctx, field)
+			case "imagePlaceholderColors":
+				return ec.fieldContext_Profile_imagePlaceholderColors(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Profile", field.Name)
 		},
@@ -5125,6 +5211,13 @@ func (ec *executionContext) _Profile(ctx context.Context, sel ast.SelectionSet, 
 		case "imageSrc":
 
 			out.Values[i] = ec._Profile_imageSrc(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "imagePlaceholderColors":
+
+			out.Values[i] = ec._Profile_imagePlaceholderColors(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++

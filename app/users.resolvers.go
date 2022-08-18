@@ -27,8 +27,8 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, user model.UserUpdate
 	return updatedUser, nil
 }
 
-func (r *queryResolver) User(ctx context.Context) (*model.User, error) {
-	user, err := r.userService.User(ctx)
+func (r *queryResolver) User(ctx context.Context, identityID *string) (*model.User, error) {
+	user, err := r.userService.User(ctx, identityID)
 
 	if err != nil {
 		return nil, gqlerror.Errorf("cannot find user")
