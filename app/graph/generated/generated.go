@@ -4648,7 +4648,12 @@ func (ec *executionContext) unmarshalInputAddressInput(ctx context.Context, obj 
 		asMap[k] = v
 	}
 
-	for k, v := range asMap {
+	fieldsInOrder := [...]string{"address", "city", "postalCode", "countryAlphaCode"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
 		switch k {
 		case "address":
 			var err error
@@ -4695,7 +4700,12 @@ func (ec *executionContext) unmarshalInputContactInput(ctx context.Context, obj 
 		asMap[k] = v
 	}
 
-	for k, v := range asMap {
+	fieldsInOrder := [...]string{"email", "phoneNumber", "phoneNumberCountryAlphaCode", "phoneNumber2", "phoneNumber2CountryAlphaCode", "web"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
 		switch k {
 		case "email":
 			var err error
@@ -4758,7 +4768,12 @@ func (ec *executionContext) unmarshalInputProfileInput(ctx context.Context, obj 
 		asMap[k] = v
 	}
 
-	for k, v := range asMap {
+	fieldsInOrder := [...]string{"bio", "whyVoteMe", "imageSrc"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
 		switch k {
 		case "bio":
 			var err error
@@ -4797,7 +4812,12 @@ func (ec *executionContext) unmarshalInputUserUpdateInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	for k, v := range asMap {
+	fieldsInOrder := [...]string{"firstName", "lastName", "username", "gender", "locale", "address", "contact", "profile"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
 		switch k {
 		case "firstName":
 			var err error

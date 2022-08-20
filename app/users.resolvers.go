@@ -10,6 +10,7 @@ import (
 	"gitlab.vecomentman.com/vote-your-face/service/user/api/model"
 )
 
+// UpdateUser is the resolver for the updateUser field.
 func (r *mutationResolver) UpdateUser(ctx context.Context, user model.UserUpdateInput) (*model.User, error) {
 	gqlError := gqlerror.Errorf("user cannot be updated")
 
@@ -27,6 +28,7 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, user model.UserUpdate
 	return updatedUser, nil
 }
 
+// User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, identityID *string) (*model.User, error) {
 	user, err := r.userService.User(ctx, identityID)
 
