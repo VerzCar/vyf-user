@@ -1,8 +1,8 @@
 package database
 
 import (
-	"gitlab.vecomentman.com/libs/logger"
-	model2 "gitlab.vecomentman.com/vote-your-face/service/user/api/model"
+	"github.com/VerzCar/vyf-lib-logger"
+	model2 "github.com/VerzCar/vyf-user/api/model"
 	"gorm.io/gorm"
 )
 

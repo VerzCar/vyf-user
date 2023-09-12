@@ -2,8 +2,8 @@ package app
 
 import (
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/VerzCar/vyf-user/app/graph/generated"
 	"github.com/gin-gonic/gin"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/graph/generated"
 )
 
 // GQL defines the Graphql handler

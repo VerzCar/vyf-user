@@ -1,7 +1,7 @@
 package model
 
 import (
-	"gitlab.vecomentman.com/vote-your-face/service/user/utils"
+	"github.com/VerzCar/vyf-user/utils"
 	"gorm.io/gorm"
 	"math/rand"
 	"time"

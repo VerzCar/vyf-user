@@ -6,7 +6,7 @@ package app
 import (
 	"context"
 
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/graph/generated"
+	"github.com/VerzCar/vyf-user/app/graph/generated"
 )
 
 // Ping is the resolver for the ping field.

@@ -2,11 +2,11 @@ package app
 
 //go:generate go run github.com/99designs/gqlgen
 import (
+	"github.com/VerzCar/vyf-lib-awsx"
+	"github.com/VerzCar/vyf-lib-logger"
+	"github.com/VerzCar/vyf-user/api"
+	"github.com/VerzCar/vyf-user/app/config"
 	"github.com/go-playground/validator/v10"
-	"gitlab.vecomentman.com/libs/awsx"
-	"gitlab.vecomentman.com/libs/logger"
-	"gitlab.vecomentman.com/vote-your-face/service/user/api"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/config"
 )
 
 type Resolver struct {

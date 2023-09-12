@@ -6,8 +6,8 @@ package app
 import (
 	"context"
 
+	"github.com/VerzCar/vyf-user/api/model"
 	"github.com/vektah/gqlparser/v2/gqlerror"
-	"gitlab.vecomentman.com/vote-your-face/service/user/api/model"
 )
 
 // UpdateUser is the resolver for the updateUser field.

@@ -7,9 +7,9 @@ WORKDIR src/service-app
 # add workaround to add own repositoriy packages
 RUN git config --global \
 url."https://vecLibsToken:oac9pW1xsTMYbxK4DeYK@gitlab.vecomentman.com/".insteadOf "https://gitlab.vecomentman.com/" && \
-go list -m gitlab.vecomentman.com/libs/logger && \
+go list -m github.com/VerzCar/vyf-lib-logger && \
 go list -m gitlab.vecomentman.com/libs/email && \
-go list -m gitlab.vecomentman.com/libs/awsx
+go list -m github.com/VerzCar/vyf-lib-awsx
 
 # Download all dependencies.
 RUN go mod download

@@ -14,9 +14,9 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/VerzCar/vyf-user/api/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
-	"gitlab.vecomentman.com/vote-your-face/service/user/api/model"
 )
 
 // region    ************************** generated!.gotpl **************************

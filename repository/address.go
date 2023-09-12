@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"gitlab.vecomentman.com/vote-your-face/service/user/api/model"
+	"github.com/VerzCar/vyf-user/api/model"
 )
 
 // TransformAddressInput transform the input from source src to destination dest

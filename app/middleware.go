@@ -2,10 +2,10 @@ package app
 
 import (
 	"fmt"
+	"github.com/VerzCar/vyf-lib-awsx"
+	routerContext "github.com/VerzCar/vyf-user/app/router/ctx"
+	"github.com/VerzCar/vyf-user/app/router/header"
 	"github.com/gin-gonic/gin"
-	"gitlab.vecomentman.com/libs/awsx"
-	routerContext "gitlab.vecomentman.com/vote-your-face/service/user/app/router/ctx"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/router/header"
 	"net/http"
 )
 

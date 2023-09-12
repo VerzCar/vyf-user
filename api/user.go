@@ -3,12 +3,11 @@ package api
 import (
 	"context"
 	"fmt"
-	"gitlab.vecomentman.com/libs/logger"
-	"gitlab.vecomentman.com/vote-your-face/service/user/api/model"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/config"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/database"
-	emailSvc "gitlab.vecomentman.com/vote-your-face/service/user/app/email"
-	routerContext "gitlab.vecomentman.com/vote-your-face/service/user/app/router/ctx"
+	"github.com/VerzCar/vyf-lib-logger"
+	"github.com/VerzCar/vyf-user/api/model"
+	"github.com/VerzCar/vyf-user/app/config"
+	"github.com/VerzCar/vyf-user/app/database"
+	routerContext "github.com/VerzCar/vyf-user/app/router/ctx"
 )
 
 type UserService interface {
@@ -32,23 +31,20 @@ type UserRepository interface {
 }
 
 type userService struct {
-	storage      UserRepository
-	emailService emailSvc.Service
-	config       *config.Config
-	log          logger.Logger
+	storage UserRepository
+	config  *config.Config
+	log     logger.Logger
 }
 
 func NewUserService(
 	userRepo UserRepository,
-	emailService emailSvc.Service,
 	config *config.Config,
 	log logger.Logger,
 ) UserService {
 	return &userService{
-		storage:      userRepo,
-		emailService: emailService,
-		config:       config,
-		log:          log,
+		storage: userRepo,
+		config:  config,
+		log:     log,
 	}
 }
 
@@ -70,7 +66,7 @@ func (u *userService) User(
 	isQueryingItself := identityId == nil
 
 	if isQueryingItself {
-		queryIdentityId = authClaims.Subject
+		queryIdentityId = authClaims.Subject()
 	} else {
 		queryIdentityId = *identityId
 	}
@@ -84,7 +80,7 @@ func (u *userService) User(
 	case database.RecordNotFound(err) && isQueryingItself:
 		newUser := &model.User{
 			IdentityID: queryIdentityId,
-			Username:   authClaims.Subject,
+			Username:   authClaims.Subject(),
 			Profile:    &model.Profile{},
 		}
 		user, err := u.storage.CreateNewUser(newUser)

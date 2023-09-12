@@ -2,17 +2,16 @@ package main
 
 import (
 	"fmt"
+	"github.com/VerzCar/vyf-lib-awsx"
+	"github.com/VerzCar/vyf-lib-logger"
+	"github.com/VerzCar/vyf-user/api"
+	"github.com/VerzCar/vyf-user/app"
+	"github.com/VerzCar/vyf-user/app/config"
+	"github.com/VerzCar/vyf-user/app/database"
+	"github.com/VerzCar/vyf-user/app/router"
+	"github.com/VerzCar/vyf-user/repository"
+	"github.com/VerzCar/vyf-user/utils"
 	"github.com/go-playground/validator/v10"
-	"gitlab.vecomentman.com/libs/awsx"
-	"gitlab.vecomentman.com/libs/logger"
-	"gitlab.vecomentman.com/vote-your-face/service/user/api"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/config"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/database"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/email"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/router"
-	"gitlab.vecomentman.com/vote-your-face/service/user/repository"
-	"gitlab.vecomentman.com/vote-your-face/service/user/utils"
 	"os"
 )
 
@@ -57,15 +56,8 @@ func run() error {
 		return err
 	}
 
-	// initialize third party services
-	emailService := email.NewService(envConfig, log)
-
-	if err != nil {
-		return err
-	}
-
 	// initialize api services
-	userService := api.NewUserService(storage, emailService, envConfig, log)
+	userService := api.NewUserService(storage, envConfig, log)
 
 	validate = validator.New()
 

@@ -2,14 +2,14 @@ package resolver_test
 
 /*import (
 	"github.com/gin-gonic/gin"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/cache"
-	testdb2 "gitlab.vecomentman.com/vote-your-face/service/user/app/database/testdb"
-	gqlResolver "gitlab.vecomentman.com/vote-your-face/service/user/app/graph/resolver"
-	mainRouter "gitlab.vecomentman.com/vote-your-face/service/user/app/router"
-	"gitlab.vecomentman.com/vote-your-face/service/user/config"
-	"gitlab.vecomentman.com/libs/logger"
-	"gitlab.vecomentman.com/vote-your-face/service/user/utils"
-	"gitlab.vecomentman.com/vote-your-face/service/user/utils/testing/client"
+	"github.com/VerzCar/vyf-user/app/cache"
+	testdb2 "github.com/VerzCar/vyf-user/app/database/testdb"
+	gqlResolver "github.com/VerzCar/vyf-user/app/graph/resolver"
+	mainRouter "github.com/VerzCar/vyf-user/app/router"
+	"github.com/VerzCar/vyf-user/config"
+	"github.com/VerzCar/vyf-lib-logger"
+	"github.com/VerzCar/vyf-user/utils"
+	"github.com/VerzCar/vyf-user/utils/testing/client"
 	"os"
 	"testing"
 )

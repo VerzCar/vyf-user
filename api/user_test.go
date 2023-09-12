@@ -4,9 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"gitlab.vecomentman.com/vote-your-face/service/user/api"
-	"gitlab.vecomentman.com/vote-your-face/service/user/api/model"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/email"
+	"github.com/VerzCar/vyf-user/api"
+	"github.com/VerzCar/vyf-user/api/model"
 	"gorm.io/gorm"
 	"reflect"
 	"testing"
@@ -15,8 +14,7 @@ import (
 
 func TestUserService_User(t *testing.T) {
 	mockRepo := &mockUserRepository{}
-	mockEmailSvc := &mockEmailService{}
-	mockService := api.NewUserService(mockRepo, mockEmailSvc, config, log)
+	mockService := api.NewUserService(mockRepo, config, log)
 
 	ctxMock := putUserIntoContext(mockUser.Elon)
 	ctxNewUserMock := putUserIntoContext(mockUser.NewUser)
@@ -70,8 +68,7 @@ func TestUserService_User(t *testing.T) {
 
 func TestUserService_UpdateUser(t *testing.T) {
 	mockRepo := &mockUserRepository{}
-	mockEmailSvc := &mockEmailService{}
-	mockService := api.NewUserService(mockRepo, mockEmailSvc, config, log)
+	mockService := api.NewUserService(mockRepo, config, log)
 
 	ctxMock := putUserIntoContext(mockUser.Elon)
 	//ctxNewUserMock := putUserIntoContext(mockUser.NewUser)
