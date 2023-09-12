@@ -3,15 +3,12 @@ package model
 import (
 	"database/sql"
 	"database/sql/driver"
-	"fmt"
 	_ "github.com/go-playground/validator/v10"
-	"io"
-	"strconv"
 	"time"
 )
 
 type User struct {
-	ID         int64         `json:"id" gorm:"primary_key;index;"`
+	ID         int64         `json:"id" gorm:"primary_key;"`
 	IdentityID string        `json:"identityId" gorm:"type:varchar(50);unique;not null"`
 	Username   string        `json:"username" gorm:"type:varchar(40);unique;not null"`
 	FirstName  string        `json:"firstName" gorm:"type:varchar(50)"`
@@ -29,15 +26,19 @@ type User struct {
 	UpdatedAt  time.Time     `json:"updatedAt" gorm:"autoUpdateTime;"`
 }
 
-type UserUpdateInput struct {
-	FirstName *string       `json:"firstName" validate:"omitempty,gt=0,lte=50"`
-	LastName  *string       `json:"lastName" validate:"omitempty,gt=0,lte=50"`
-	Username  *string       `json:"username" validate:"omitempty,gt=0,lte=40"`
-	Gender    *Gender       `json:"gender"`
-	Locale    *string       `json:"locale" validate:"omitempty,bcp47_language_tag"`
-	Address   *AddressInput `json:"address" validate:"omitempty"`
-	Contact   *ContactInput `json:"contact" validate:"omitempty"`
-	Profile   *ProfileInput `json:"profile" validate:"omitempty"`
+type UserRequest struct {
+	IdentityID string `json:"identityId" validate:"required,lte=50"`
+}
+
+type UserUpdateRequest struct {
+	FirstName *string         `json:"firstName" validate:"omitempty,gt=0,lte=50"`
+	LastName  *string         `json:"lastName" validate:"omitempty,gt=0,lte=50"`
+	Username  *string         `json:"username" validate:"omitempty,gt=0,lte=40"`
+	Gender    *Gender         `json:"gender"`
+	Locale    *string         `json:"locale" validate:"omitempty,bcp47_language_tag"`
+	Address   *AddressRequest `json:"address" validate:"omitempty"`
+	Contact   *ContactRequest `json:"contact" validate:"omitempty"`
+	Profile   *ProfileRequest `json:"profile" validate:"omitempty"`
 }
 
 type Gender string
@@ -73,21 +74,4 @@ func (e Gender) IsValid() bool {
 
 func (e Gender) String() string {
 	return string(e)
-}
-
-func (e *Gender) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = Gender(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid Gender", str)
-	}
-	return nil
-}
-
-func (e Gender) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
 }

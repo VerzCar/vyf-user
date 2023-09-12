@@ -17,7 +17,10 @@ import (
 
 func main() {
 	if err := run(); err != nil {
-		fmt.Fprintf(os.Stderr, "startup error: %s\\n", err)
+		_, err := fmt.Fprintf(os.Stderr, "startup error: %s\\n", err)
+		if err != nil {
+			return
+		}
 		os.Exit(1)
 	}
 }
@@ -61,16 +64,15 @@ func run() error {
 
 	validate = validator.New()
 
-	resolver := app.NewResolver(
+	r := router.Setup(envConfig.Environment)
+	server := app.NewServer(
+		r,
 		authService,
 		userService,
 		validate,
 		envConfig,
 		log,
 	)
-
-	r := router.Setup(envConfig.Environment)
-	server := app.NewServer(r, resolver)
 
 	err = server.Run()
 

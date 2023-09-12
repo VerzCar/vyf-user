@@ -1,20 +1,39 @@
 package app
 
-//go:generate go run github.com/99designs/gqlgen
 import (
+	awsx "github.com/VerzCar/vyf-lib-awsx"
+	logger "github.com/VerzCar/vyf-lib-logger"
+	"github.com/VerzCar/vyf-user/api"
+	"github.com/VerzCar/vyf-user/app/config"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"log"
 )
 
 type Server struct {
-	router   *gin.Engine
-	resolver *Resolver
+	router      *gin.Engine
+	authService awsx.AuthService
+	userService api.UserService
+	validate    *validator.Validate
+	config      *config.Config
+	log         logger.Logger
 }
 
-func NewServer(router *gin.Engine, resolver *Resolver) *Server {
+func NewServer(
+	router *gin.Engine,
+	authService awsx.AuthService,
+	userService api.UserService,
+	validate *validator.Validate,
+	config *config.Config,
+	log logger.Logger,
+) *Server {
 	server := &Server{
-		router:   router,
-		resolver: resolver,
+		router:      router,
+		authService: authService,
+		userService: userService,
+		validate:    validate,
+		config:      config,
+		log:         log,
 	}
 
 	server.routes()

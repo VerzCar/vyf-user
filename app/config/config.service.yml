@@ -1,9 +1,6 @@
 # hosts
 hosts:
   vec: http://localhost:4200/
-  svc:
-    payment: http://paymentsvc:8080
-    sso: http://localhost:1010
 
 # aws
 aws:
@@ -12,36 +9,6 @@ aws:
     userPoolId: poolId
     awsDefaultRegion: eu-central-1
     clientSecret: secret
-
-# smtp + email config
-smtp:
-  tls: true
-  host: smtp.strato.de
-  port: 123
-  noReply:
-    user: user@email.de
-    password: pwd
-  account:
-    user: user@email.de
-    password: pwd
-
-emails:
-  enabled: true
-  from:
-    noReply:
-      email: no-reply@vecomentman.de
-      name: "no-reply Vecomentman"
-    vecomentman:
-      email: account@vecomentman.de
-      name: "Vecomentman"
-    company:
-      email: account@vecomentman.de
-      name: "Companies Vecomentman"
-    account:
-      email: account@vecomentman.de
-      name: "Account Vecomentman"
-  test:
-    email: dev@vecomentman.de
 
 # Database
 db:
@@ -56,17 +23,6 @@ db:
     name: tname
     user: user
     password: pwd
-
-# Redis server
-redis:
-  host: cache
-  port: 6379
-  username: default
-  db: 0
-  timeout: 60
-  password: pwd
-  test:
-    db: 1
 
 # Security
 security:
@@ -93,14 +49,3 @@ user:
     email: admin@vecomentman.de
     name: admin
     password: pwd
-
-# this environment variables are used for testing only
-dockerTest:
-  userSvc:
-    imageName: userservice
-    tag: latest
-    containerName: usersvc-test
-    hostname: usersvc
-    networks:
-      - n_usersvc
-      - traefik-public

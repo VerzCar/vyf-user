@@ -28,44 +28,6 @@ type Config struct {
 		}
 	}
 
-	Smtp struct {
-		Host    string
-		Port    uint16
-		NoReply struct {
-			User     string
-			Password string
-		}
-		Account struct {
-			User     string
-			Password string
-		}
-	}
-
-	Emails struct {
-		Enabled bool
-		From    struct {
-			NoReply struct {
-				Email string
-				Name  string
-			}
-			Vecomentman struct {
-				Email string
-				Name  string
-			}
-			Company struct {
-				Email string
-				Name  string
-			}
-			Account struct {
-				Email string
-				Name  string
-			}
-		}
-		Test struct {
-			Email string
-		}
-	}
-
 	Db struct {
 		Host      string
 		Port      uint16
@@ -79,18 +41,6 @@ type Config struct {
 			Name     string
 			User     string
 			Password string
-		}
-	}
-
-	Redis struct {
-		Host     string
-		Port     uint16
-		Username string
-		Db       uint16
-		Timeout  uint16
-		Password string
-		Test     struct {
-			Db uint16
 		}
 	}
 
@@ -121,16 +71,6 @@ type Config struct {
 			Email    string
 			Name     string
 			Password string
-		}
-	}
-
-	DockerTest struct {
-		UserSvc struct {
-			ImageName     string
-			Tag           string
-			ContainerName string
-			Hostname      string
-			Networks      []string
 		}
 	}
 }

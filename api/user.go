@@ -17,7 +17,7 @@ type UserService interface {
 	) (*model.User, error)
 	UpdateUser(
 		ctx context.Context,
-		userInput *model.UserUpdateInput,
+		userInput *model.UserUpdateRequest,
 	) (*model.User, error)
 }
 
@@ -26,8 +26,8 @@ type UserRepository interface {
 	CreateNewUser(user *model.User) (*model.User, error)
 	UpdateUser(user *model.User) (*model.User, error)
 	LocaleByLcidString(lcid string) (*model.Locale, error)
-	TransformAddressInput(src *model.AddressInput, dest *model.Address) error
-	TransformContactInput(src *model.ContactInput, dest *model.Contact) error
+	TransformAddressRequest(src *model.AddressRequest, dest *model.Address) error
+	TransformContactRequest(src *model.ContactRequest, dest *model.Contact) error
 }
 
 type userService struct {
@@ -101,7 +101,7 @@ func (u *userService) User(
 
 func (u *userService) UpdateUser(
 	ctx context.Context,
-	userInput *model.UserUpdateInput,
+	userInput *model.UserUpdateRequest,
 ) (*model.User, error) {
 	user, err := u.User(ctx, nil)
 
@@ -150,7 +150,7 @@ func (u *userService) UpdateUser(
 		if user.Address != nil {
 			address = user.Address
 		}
-		err = u.storage.TransformAddressInput(userInput.Address, address)
+		err = u.storage.TransformAddressRequest(userInput.Address, address)
 
 		if err != nil {
 			u.log.Errorf("error transforming address entry: %s", err)
@@ -166,7 +166,7 @@ func (u *userService) UpdateUser(
 		if user.Contact != nil {
 			contact = user.Contact
 		}
-		err = u.storage.TransformContactInput(userInput.Contact, contact)
+		err = u.storage.TransformContactRequest(userInput.Contact, contact)
 
 		if err != nil {
 			u.log.Errorf("error transforming contact entry: %s", err)
@@ -187,7 +187,7 @@ func (u *userService) UpdateUser(
 }
 
 func transformProfileInput(
-	profileInput *model.ProfileInput,
+	profileInput *model.ProfileRequest,
 	profile *model.Profile,
 ) {
 	if profileInput.Bio != nil {

@@ -16,7 +16,7 @@ type Address struct {
 	UpdatedAt  time.Time `json:"updatedAt" gorm:"autoUpdateTime;"`
 }
 
-type AddressInput struct {
+type AddressRequest struct {
 	Address          string `json:"address" validate:"required,gt=0,lte=100"`
 	City             string `json:"city" validate:"required,gt=0,lte=80"`
 	PostalCode       string `json:"postalCode" validate:"required,numeric,gt=0,lte=15"`

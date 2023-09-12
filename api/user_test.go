@@ -89,8 +89,8 @@ func TestUserService_UpdateUser(t *testing.T) {
 		Username:  &username,
 		Gender:    &gender,
 		Locale:    &locale,
-		Address:   &model.AddressInput{},
-		Contact:   &model.ContactInput{},
+		Address:   &model.AddressRequest{},
+		Contact:   &model.ContactRequest{},
 		Profile:   &profile,
 	}
 
@@ -183,11 +183,11 @@ func (m mockUserRepository) LocaleByLcidString(lcid string) (*model.Locale, erro
 	return &model.Locale{}, nil
 }
 
-func (m mockUserRepository) TransformAddressInput(src *model.AddressInput, dest *model.Address) error {
+func (m mockUserRepository) TransformAddressInput(src *model.AddressRequest, dest *model.Address) error {
 	return nil
 }
 
-func (m mockUserRepository) TransformContactInput(src *model.ContactInput, dest *model.Contact) error {
+func (m mockUserRepository) TransformContactInput(src *model.ContactRequest, dest *model.Contact) error {
 	return nil
 }
 

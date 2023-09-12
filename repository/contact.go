@@ -5,8 +5,8 @@ import (
 	"github.com/VerzCar/vyf-user/validate"
 )
 
-// TransformContactInput transform the input from source src to destination dest
-func (s *storage) TransformContactInput(src *model.ContactInput, dest *model.Contact) error {
+// TransformContactRequest transform the input from source src to destination dest
+func (s *storage) TransformContactRequest(src *model.ContactRequest, dest *model.Contact) error {
 
 	dest.Email = src.Email
 

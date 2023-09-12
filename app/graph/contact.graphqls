@@ -10,7 +10,7 @@ type Contact {
     updatedAt: Time!
 }
 
-input ContactInput {
+input ContactRequest {
     email: String!
     phoneNumber: String!
     phoneNumberCountryAlphaCode: String!

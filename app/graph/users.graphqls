@@ -23,8 +23,8 @@ input UserUpdateInput {
     username: String
     gender: Gender
     locale: String
-    address: AddressInput
-    contact: ContactInput
+    address: AddressRequest
+    contact: ContactRequest
     profile: ProfileInput
 }
 

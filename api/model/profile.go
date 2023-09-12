@@ -1,9 +1,6 @@
 package model
 
 import (
-	"github.com/VerzCar/vyf-user/utils"
-	"gorm.io/gorm"
-	"math/rand"
 	"time"
 )
 
@@ -17,16 +14,8 @@ type Profile struct {
 	UpdatedAt              time.Time `json:"updatedAt" gorm:"autoUpdateTime;default:current_timestamp;"`
 }
 
-type ProfileInput struct {
+type ProfileRequest struct {
 	Bio       *string `json:"bio" validate:"omitempty,gt=0,lte=200"`
 	WhyVoteMe *string `json:"whyVoteMe" validate:"omitempty,gt=0,lte=50"`
 	ImageSrc  *string `json:"imageSrc" validate:"omitempty,url"`
-}
-
-func (p *Profile) BeforeCreate(tx *gorm.DB) (err error) {
-	gradients := utils.GradientPairList()
-	rand.Seed(time.Now().UnixNano())
-	randomColor := gradients[rand.Intn(len(gradients))]
-	p.ImagePlaceholderColors = randomColor
-	return
 }

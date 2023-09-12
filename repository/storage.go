@@ -21,8 +21,8 @@ type Storage interface {
 	CountryById(id int64) (*model.Country, error)
 	CountryByAlpha2(alpha2 string) (*model.Country, error)
 	LocaleByLcidString(lcid string) (*model.Locale, error)
-	TransformAddressInput(src *model.AddressInput, dest *model.Address) error
-	TransformContactInput(src *model.ContactInput, dest *model.Contact) error
+	TransformAddressRequest(src *model.AddressRequest, dest *model.Address) error
+	TransformContactRequest(src *model.ContactRequest, dest *model.Contact) error
 	CreateNewUser(user *model.User) (*model.User, error)
 	UpdateUser(user *model.User) (*model.User, error)
 	UserById(id int64) (*model.User, error)

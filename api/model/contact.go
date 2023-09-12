@@ -20,7 +20,7 @@ type Contact struct {
 	UpdatedAt             time.Time     `json:"updatedAt" gorm:"autoUpdateTime;"`
 }
 
-type ContactInput struct {
+type ContactRequest struct {
 	Email                        string  `json:"email" validate:"required,email"`
 	PhoneNumber                  string  `json:"phoneNumber" validate:"required,numeric,lte=20"`
 	PhoneNumberCountryAlphaCode  string  `json:"phoneNumberCountryAlphaCode" validate:"required,iso3166_1_alpha2"`

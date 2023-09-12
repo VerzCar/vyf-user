@@ -8,7 +8,7 @@ type Address {
     updatedAt: Time!
 }
 
-input AddressInput {
+input AddressRequest {
     address: String!
     city: String!
     postalCode: String!

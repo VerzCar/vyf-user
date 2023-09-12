@@ -3,13 +3,16 @@ package app
 func (s *Server) routes() {
 	router := s.router
 
+	// Service group
+	v1 := router.Group("/v1/api/user")
+	v1.Use(s.ginContextToContext())
+
 	// Authorization group
-	authorized := router.Group("/")
-	authorized.Use(s.ginContextToContext())
-	authorized.Use(s.authGuard(s.resolver.authService))
+	authorized := v1.Group("/")
+	authorized.Use(s.authGuard(s.authService))
 	{
-		// graphql route
-		authorized.POST("/query", gqlHandler(s.resolver))
+		authorized.GET("/me", s.User())
+		authorized.PUT("/update", s.UpdateUser())
 	}
 
 }
