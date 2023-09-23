@@ -86,7 +86,7 @@ func (s *Server) UpdateUser() gin.HandlerFunc {
 			return
 		}
 
-		user, err := s.userService.UpdateUser(ctx, userUpdateReq)
+		user, err := s.userService.UpdateUser(ctx.Request.Context(), userUpdateReq)
 
 		if err != nil {
 			s.log.Errorf("service error: %v", err)
@@ -94,9 +94,24 @@ func (s *Server) UpdateUser() gin.HandlerFunc {
 			return
 		}
 
+		userResponse := &model.UserResponse{
+			ID:         user.ID,
+			IdentityID: user.IdentityID,
+			Username:   user.Username,
+			FirstName:  user.FirstName,
+			LastName:   user.LastName,
+			Gender:     user.Gender,
+			Locale:     user.Locale,
+			Address:    user.Address,
+			Contact:    user.Contact,
+			Profile:    user.Profile,
+			CreatedAt:  user.CreatedAt,
+			UpdatedAt:  user.UpdatedAt,
+		}
+
 		response := model.Response{
 			Status: model.ResponseSuccess,
-			Data:   user,
+			Data:   userResponse,
 		}
 
 		ctx.JSON(http.StatusOK, response)
