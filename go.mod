@@ -3,26 +3,21 @@ module github.com/VerzCar/vyf-user
 go 1.21
 
 require (
-	github.com/99designs/gqlgen v0.17.14
-	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/docker/docker v20.10.17+incompatible // indirect
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-playground/validator/v10 v10.11.0
 	github.com/gofrs/uuid v4.2.0+incompatible // indirect
 	github.com/golang-migrate/migrate/v4 v4.15.2
-	github.com/gorilla/websocket v1.5.0
-	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/jackc/pgx/v4 v4.17.0 // indirect
 	github.com/lib/pq v1.10.6
 	github.com/mattn/go-isatty v0.0.16 // indirect
-	github.com/mitchellh/mapstructure v1.5.0
+	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/moby/term v0.0.0-20220808134915-39b0c02b01ae // indirect
 	github.com/nyaruka/phonenumbers v1.1.0
 	github.com/rs/cors v1.8.2 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/viper v1.12.0
 	github.com/stretchr/testify v1.8.0
-	github.com/vektah/gqlparser/v2 v2.4.8
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	golang.org/x/crypto v0.1.0 // indirect
@@ -74,12 +69,13 @@ require (
 )
 
 require (
-	github.com/VerzCar/vyf-lib-awsx v0.0.0-20230912103048-c468a66fc51a
 	github.com/VerzCar/vyf-lib-logger v0.0.0-20230912103902-83d23834d5fc
 	github.com/rs/cors/wrapper/gin v0.0.0-20230905230807-20a76bd635d3
 )
 
 require (
+	github.com/BurntSushi/toml v1.1.0 // indirect
+	github.com/VerzCar/vyf-lib-awsx v0.0.0-20230923105802-27d023b3955a // indirect
 	github.com/aws/aws-sdk-go-v2 v1.16.4 // indirect
 	github.com/aws/aws-sdk-go-v2/config v1.15.7 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.12.2 // indirect

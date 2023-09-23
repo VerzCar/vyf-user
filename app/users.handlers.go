@@ -3,6 +3,7 @@ package app
 import (
 	"github.com/VerzCar/vyf-user/api/model"
 	"github.com/gin-gonic/gin"
+	"io"
 	"net/http"
 )
 
@@ -17,7 +18,8 @@ func (s *Server) User() gin.HandlerFunc {
 
 		err := ctx.ShouldBindJSON(userReq)
 
-		if err != nil {
+		// because the json can be optionally empty check against EOF
+		if err != nil && err != io.EOF {
 			s.log.Error(err)
 			ctx.JSON(http.StatusBadRequest, errResponse)
 			return
@@ -29,7 +31,7 @@ func (s *Server) User() gin.HandlerFunc {
 			return
 		}
 
-		user, err := s.userService.User(ctx, &userReq.IdentityID)
+		user, err := s.userService.User(ctx.Request.Context(), userReq.IdentityID)
 
 		if err != nil {
 			s.log.Errorf("service error: %v", err)
@@ -37,9 +39,24 @@ func (s *Server) User() gin.HandlerFunc {
 			return
 		}
 
+		userResponse := &model.UserResponse{
+			ID:         user.ID,
+			IdentityID: user.IdentityID,
+			Username:   user.Username,
+			FirstName:  user.FirstName,
+			LastName:   user.LastName,
+			Gender:     user.Gender,
+			Locale:     user.Locale,
+			Address:    user.Address,
+			Contact:    user.Contact,
+			Profile:    user.Profile,
+			CreatedAt:  user.CreatedAt,
+			UpdatedAt:  user.UpdatedAt,
+		}
+
 		response := model.Response{
 			Status: model.ResponseSuccess,
-			Data:   user,
+			Data:   userResponse,
 		}
 
 		ctx.JSON(http.StatusOK, response)

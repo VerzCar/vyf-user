@@ -66,7 +66,7 @@ func (u *userService) User(
 	isQueryingItself := identityId == nil
 
 	if isQueryingItself {
-		queryIdentityId = authClaims.Subject()
+		queryIdentityId = authClaims.Subject
 	} else {
 		queryIdentityId = *identityId
 	}
@@ -80,7 +80,7 @@ func (u *userService) User(
 	case database.RecordNotFound(err) && isQueryingItself:
 		newUser := &model.User{
 			IdentityID: queryIdentityId,
-			Username:   authClaims.Subject(),
+			Username:   authClaims.PrivateClaims.Username,
 			Profile:    &model.Profile{},
 		}
 		user, err := u.storage.CreateNewUser(newUser)

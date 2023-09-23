@@ -26,8 +26,23 @@ type User struct {
 	UpdatedAt  time.Time     `json:"updatedAt" gorm:"autoUpdateTime;"`
 }
 
+type UserResponse struct {
+	ID         int64     `json:"id"`
+	IdentityID string    `json:"identityId"`
+	Username   string    `json:"username"`
+	FirstName  string    `json:"firstName"`
+	LastName   string    `json:"LastName"`
+	Gender     Gender    `json:"gender"`
+	Locale     *Locale   `json:"locale,omitempty"`
+	Address    *Address  `json:"address,omitempty"`
+	Contact    *Contact  `json:"contact,omitempty"`
+	Profile    *Profile  `json:"profile,omitempty"`
+	CreatedAt  time.Time `json:"createdAt"`
+	UpdatedAt  time.Time `json:"updatedAt"`
+}
+
 type UserRequest struct {
-	IdentityID string `json:"identityId" validate:"required,lte=50"`
+	IdentityID *string `json:"identityId,omitempty" validate:"omitempty,lte=50"`
 }
 
 type UserUpdateRequest struct {
