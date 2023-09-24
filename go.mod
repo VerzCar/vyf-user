@@ -75,7 +75,7 @@ require (
 
 require (
 	github.com/BurntSushi/toml v1.1.0 // indirect
-	github.com/VerzCar/vyf-lib-awsx v0.0.0-20230923105802-27d023b3955a // indirect
+	github.com/VerzCar/vyf-lib-awsx v1.2.0 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.16.4 // indirect
 	github.com/aws/aws-sdk-go-v2/config v1.15.7 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.12.2 // indirect

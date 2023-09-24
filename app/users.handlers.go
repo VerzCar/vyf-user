@@ -11,7 +11,8 @@ func (s *Server) User() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		errResponse := model.Response{
 			Status: model.ResponseError,
-			Data:   "cannot find user",
+			Msg:    "cannot find user",
+			Data:   nil,
 		}
 
 		userReq := &model.UserRequest{}
@@ -56,6 +57,7 @@ func (s *Server) User() gin.HandlerFunc {
 
 		response := model.Response{
 			Status: model.ResponseSuccess,
+			Msg:    "",
 			Data:   userResponse,
 		}
 
@@ -67,12 +69,23 @@ func (s *Server) UpdateUser() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		errResponse := model.Response{
 			Status: model.ResponseError,
-			Data:   "user cannot be updated",
+			Msg:    "user cannot be updated",
+			Data:   nil,
 		}
 
 		userUpdateReq := &model.UserUpdateRequest{}
 
 		err := ctx.ShouldBindJSON(userUpdateReq)
+
+		if err == io.EOF {
+			response := model.Response{
+				Status: model.ResponseNop,
+				Msg:    "no update",
+				Data:   nil,
+			}
+			ctx.JSON(http.StatusOK, response)
+			return
+		}
 
 		if err != nil {
 			s.log.Error(err)
@@ -111,6 +124,7 @@ func (s *Server) UpdateUser() gin.HandlerFunc {
 
 		response := model.Response{
 			Status: model.ResponseSuccess,
+			Msg:    "",
 			Data:   userResponse,
 		}
 

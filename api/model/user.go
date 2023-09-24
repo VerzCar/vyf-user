@@ -46,14 +46,14 @@ type UserRequest struct {
 }
 
 type UserUpdateRequest struct {
-	FirstName *string         `json:"firstName" validate:"omitempty,gt=0,lte=50"`
-	LastName  *string         `json:"lastName" validate:"omitempty,gt=0,lte=50"`
-	Username  *string         `json:"username" validate:"omitempty,gt=0,lte=40"`
-	Gender    *Gender         `json:"gender"`
-	Locale    *string         `json:"locale" validate:"omitempty,bcp47_language_tag"`
-	Address   *AddressRequest `json:"address" validate:"omitempty"`
-	Contact   *ContactRequest `json:"contact" validate:"omitempty"`
-	Profile   *ProfileRequest `json:"profile" validate:"omitempty"`
+	FirstName *string         `json:"firstName,omitempty" validate:"omitempty,gt=0,lte=50"`
+	LastName  *string         `json:"lastName,omitempty" validate:"omitempty,gt=0,lte=50"`
+	Username  *string         `json:"username,omitempty" validate:"omitempty,gt=0,lte=40"`
+	Gender    *Gender         `json:"gender,omitempty" validate:"omitempty"`
+	Locale    *string         `json:"locale,omitempty" validate:"omitempty,bcp47_language_tag"`
+	Address   *AddressRequest `json:"address,omitempty" validate:"omitempty"`
+	Contact   *ContactRequest `json:"contact,omitempty" validate:"omitempty"`
+	Profile   *ProfileRequest `json:"profile,omitempty" validate:"omitempty"`
 }
 
 type Gender string
