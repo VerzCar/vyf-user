@@ -5,7 +5,6 @@ func (s *Server) routes() {
 
 	// Service group
 	v1 := router.Group("/v1/api/user")
-	v1.Use(s.ginContextToContext())
 
 	// Authorization group
 	authorized := v1.Group("/")
@@ -14,5 +13,4 @@ func (s *Server) routes() {
 		authorized.GET("/me", s.User())
 		authorized.PUT("/update", s.UpdateUser())
 	}
-
 }
