@@ -12,7 +12,7 @@ type User struct {
 	IdentityID string        `json:"identityId" gorm:"type:varchar(50);unique;not null"`
 	Username   string        `json:"username" gorm:"type:varchar(40);unique;not null"`
 	FirstName  string        `json:"firstName" gorm:"type:varchar(50)"`
-	LastName   string        `json:"LastName" gorm:"type:varchar(50)"`
+	LastName   string        `json:"lastName" gorm:"type:varchar(50)"`
 	Gender     Gender        `json:"gender" gorm:"type:gender;not null;default:X"`
 	LocaleID   sql.NullInt64 `json:"LocaleId"`
 	Locale     *Locale       `json:"locale" gorm:"constraint:OnDelete:RESTRICT;"`
