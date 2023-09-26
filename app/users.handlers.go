@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func (s *Server) User() gin.HandlerFunc {
+func (s *Server) UserMe() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		errResponse := model.Response{
 			Status: model.ResponseError,
@@ -15,9 +15,50 @@ func (s *Server) User() gin.HandlerFunc {
 			Data:   nil,
 		}
 
-		userReq := &model.UserRequest{}
+		user, err := s.userService.User(ctx.Request.Context(), nil)
 
-		err := ctx.ShouldBindJSON(userReq)
+		if err != nil {
+			s.log.Errorf("service error: %v", err)
+			ctx.JSON(http.StatusInternalServerError, errResponse)
+			return
+		}
+
+		userResponse := &model.UserResponse{
+			ID:         user.ID,
+			IdentityID: user.IdentityID,
+			Username:   user.Username,
+			FirstName:  user.FirstName,
+			LastName:   user.LastName,
+			Gender:     user.Gender,
+			Locale:     user.Locale,
+			Address:    user.Address,
+			Contact:    user.Contact,
+			Profile:    user.Profile,
+			CreatedAt:  user.CreatedAt,
+			UpdatedAt:  user.UpdatedAt,
+		}
+
+		response := model.Response{
+			Status: model.ResponseSuccess,
+			Msg:    "",
+			Data:   userResponse,
+		}
+
+		ctx.JSON(http.StatusOK, response)
+	}
+}
+
+func (s *Server) UserX() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		errResponse := model.Response{
+			Status: model.ResponseError,
+			Msg:    "cannot find user",
+			Data:   nil,
+		}
+
+		userUriReq := &model.UserUriRequest{}
+
+		err := ctx.ShouldBindUri(userUriReq)
 
 		// because the json can be optionally empty check against EOF
 		if err != nil && err != io.EOF {
@@ -26,13 +67,13 @@ func (s *Server) User() gin.HandlerFunc {
 			return
 		}
 
-		if err := s.validate.Struct(userReq); err != nil {
+		if err := s.validate.Struct(userUriReq); err != nil {
 			s.log.Warn(err)
 			ctx.JSON(http.StatusBadRequest, errResponse)
 			return
 		}
 
-		user, err := s.userService.User(ctx.Request.Context(), userReq.IdentityID)
+		user, err := s.userService.User(ctx.Request.Context(), &userUriReq.IdentityID)
 
 		if err != nil {
 			s.log.Errorf("service error: %v", err)

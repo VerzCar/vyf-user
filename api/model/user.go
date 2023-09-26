@@ -41,8 +41,8 @@ type UserResponse struct {
 	UpdatedAt  time.Time `json:"updatedAt"`
 }
 
-type UserRequest struct {
-	IdentityID *string `json:"identityId,omitempty" validate:"omitempty,lte=50"`
+type UserUriRequest struct {
+	IdentityID string `uri:"identityId" validate:"lte=50"`
 }
 
 type UserUpdateRequest struct {

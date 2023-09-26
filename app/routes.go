@@ -10,7 +10,9 @@ func (s *Server) routes() {
 	authorized := v1.Group("/")
 	authorized.Use(s.authGuard(s.authService))
 	{
-		authorized.GET("/me", s.User())
+		authorized.GET("/me", s.UserMe())
+		authorized.GET("/:identityId", s.UserX())
+
 		authorized.PUT("/update", s.UpdateUser())
 	}
 }
