@@ -103,8 +103,8 @@ create table profiles
     id                       bigserial
         constraint profiles_pkey
             primary key,
-    bio                      varchar(200) not null,
-    why_vote_me              varchar(50)  not null,
+    bio                      varchar(1500) not null,
+    why_vote_me              varchar(250)  not null,
     image_src                text         not null,
     image_placeholder_colors varchar(15)  not null,
     created_at               timestamp with time zone default CURRENT_TIMESTAMP,
