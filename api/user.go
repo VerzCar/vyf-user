@@ -1,6 +1,7 @@
 package api
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"github.com/VerzCar/vyf-lib-logger"
@@ -8,6 +9,8 @@ import (
 	"github.com/VerzCar/vyf-user/app/config"
 	"github.com/VerzCar/vyf-user/app/database"
 	routerContext "github.com/VerzCar/vyf-user/app/router/ctx"
+	"net/http"
+	"time"
 )
 
 type UserService interface {
@@ -88,6 +91,12 @@ func (u *userService) User(
 		if err != nil {
 			u.log.Infof("could not create user for id: %s, error: %s", queryIdentityId, err)
 			return nil, err
+		}
+
+		err = addUserToGlobalCircle(ctx)
+
+		if err != nil {
+			u.log.Errorf("could not add user to global circle for user id: %s, error: %s", queryIdentityId, err)
 		}
 
 		return user, nil
@@ -201,4 +210,43 @@ func transformProfileInput(
 	if profileInput.ImageSrc != nil {
 		profile.ImageSrc = *profileInput.ImageSrc
 	}
+}
+
+// Add the user to the global circle if it is a new user.
+// Makes a http PUT request to vote-circle service.
+func addUserToGlobalCircle(
+	ctx context.Context,
+) error {
+	accessToken, err := routerContext.ContextToBearerToken(ctx)
+
+	if err != nil {
+		return err
+	}
+
+	jsonBody := []byte(``)
+	bodyReader := bytes.NewReader(jsonBody)
+
+	serverPort := "8080"
+	requestURL := fmt.Sprintf("http://127.0.0.1:%s/v1/api/vote-circle/circle/to-global", serverPort)
+	req, err := http.NewRequest(http.MethodPut, requestURL, bodyReader)
+
+	if err != nil {
+		fmt.Printf("client: could not create request: %s\n", err)
+		return err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
+
+	client := http.Client{
+		Timeout: 30 * time.Second,
+	}
+
+	_, err = client.Do(req)
+	if err != nil {
+		fmt.Printf("client: error making http request: %s\n", err)
+		return err
+	}
+
+	return nil
 }

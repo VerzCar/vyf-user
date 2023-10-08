@@ -8,9 +8,15 @@ import (
 )
 
 const authClaimsContextKey = "AuthClaimsContextKey"
+const bearerTokenContextKey = "BearerTokenContextKey"
 
 func SetAuthClaimsContext(ctx *gin.Context, val interface{}) {
 	c := context.WithValue(ctx.Request.Context(), authClaimsContextKey, val)
+	ctx.Request = ctx.Request.WithContext(c)
+}
+
+func SetBearerTokenContext(ctx *gin.Context, val string) {
+	c := context.WithValue(ctx.Request.Context(), bearerTokenContextKey, val)
 	ctx.Request = ctx.Request.WithContext(c)
 }
 
@@ -30,4 +36,22 @@ func ContextToAuthClaims(ctx context.Context) (*awsx.JWTToken, error) {
 	}
 
 	return authClaims, nil
+}
+
+func ContextToBearerToken(ctx context.Context) (string, error) {
+	bearerTokenValue := ctx.Value(bearerTokenContextKey)
+
+	if bearerTokenValue == nil {
+		err := fmt.Errorf("could not retrieve bearer token")
+		return "", err
+	}
+
+	bearerToken, ok := bearerTokenValue.(string)
+
+	if !ok {
+		err := fmt.Errorf("bearer token has wrong type")
+		return "", err
+	}
+
+	return bearerToken, nil
 }

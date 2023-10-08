@@ -33,6 +33,7 @@ func (s *Server) authGuard(authService awsx.AuthService) gin.HandlerFunc {
 		}
 
 		routerContext.SetAuthClaimsContext(ctx, token)
+		routerContext.SetBearerTokenContext(ctx, accessToken)
 		ctx.Next()
 	}
 }
