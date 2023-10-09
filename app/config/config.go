@@ -20,11 +20,9 @@ type Config struct {
 		}
 	}
 
-	Hosts struct {
-		Vec string
-		Svc struct {
-			Payment string
-			Sso     string
+	Host struct {
+		Service struct {
+			VoteCircle string
 		}
 	}
 

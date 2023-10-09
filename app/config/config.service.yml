@@ -1,6 +1,7 @@
 # hosts
-hosts:
-  vec: http://localhost:4200/
+host:
+  service:
+    voteCircle: http://127.0.0.1:8080/v1/api/vote-circle
 
 # aws
 aws:

@@ -93,7 +93,7 @@ func (u *userService) User(
 			return nil, err
 		}
 
-		err = addUserToGlobalCircle(ctx)
+		err = addUserToGlobalCircle(ctx, u.config.Host.Service.VoteCircle)
 
 		if err != nil {
 			u.log.Errorf("could not add user to global circle for user id: %s, error: %s", queryIdentityId, err)
@@ -216,6 +216,7 @@ func transformProfileInput(
 // Makes a http PUT request to vote-circle service.
 func addUserToGlobalCircle(
 	ctx context.Context,
+	serviceUrl string,
 ) error {
 	accessToken, err := routerContext.ContextToBearerToken(ctx)
 
@@ -226,8 +227,7 @@ func addUserToGlobalCircle(
 	jsonBody := []byte(``)
 	bodyReader := bytes.NewReader(jsonBody)
 
-	serverPort := "8080"
-	requestURL := fmt.Sprintf("http://127.0.0.1:%s/v1/api/vote-circle/circle/to-global", serverPort)
+	requestURL := fmt.Sprintf("%s/circle/to-global", serviceUrl)
 	req, err := http.NewRequest(http.MethodPut, requestURL, bodyReader)
 
 	if err != nil {
