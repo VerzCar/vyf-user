@@ -41,6 +41,18 @@ type UserResponse struct {
 	UpdatedAt  time.Time `json:"updatedAt"`
 }
 
+type UserPaginated struct {
+	IdentityID      string `json:"identityId"`
+	Username        string `json:"username"`
+	ProfileImageSrc string `json:"profileImageSrc"`
+}
+
+type UserPaginatedResponse struct {
+	IdentityID string                    `json:"identityId"`
+	Username   string                    `json:"username"`
+	Profile    *ProfilePaginatedResponse `json:"profile"`
+}
+
 type UserUriRequest struct {
 	IdentityID string `uri:"identityId" validate:"lte=50"`
 }

@@ -46,6 +46,30 @@ func (s *storage) UserByIdentityId(id string) (*model.User, error) {
 	return user, nil
 }
 
+func (s *storage) Users(identityID string) ([]*model.UserPaginated, error) {
+	var users []*model.UserPaginated
+
+	err := s.db.Model(&model.User{}).
+		Select("users.username, users.identity_id, profiles.image_src as profile_image_src").
+		Joins("left join profiles on profiles.id = users.profile_id").
+		Not(&model.User{IdentityID: identityID}).
+		Limit(100).
+		Order("username ::bytea").
+		Find(&users).
+		Error
+
+	switch {
+	case err != nil && !database.RecordNotFound(err):
+		s.log.Errorf("error reading users: %s", err)
+		return nil, err
+	case database.RecordNotFound(err):
+		s.log.Infof("users not found: %s", err)
+		return nil, err
+	}
+
+	return users, nil
+}
+
 // CreateNewUser based on given user model
 func (s *storage) CreateNewUser(user *model.User) (*model.User, error) {
 	if err := s.db.Create(user).Error; err != nil {

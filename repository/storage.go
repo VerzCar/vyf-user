@@ -27,6 +27,7 @@ type Storage interface {
 	UpdateUser(user *model.User) (*model.User, error)
 	UserById(id int64) (*model.User, error)
 	UserByIdentityId(id string) (*model.User, error)
+	Users(identityID string) ([]*model.UserPaginated, error)
 }
 
 type storage struct {

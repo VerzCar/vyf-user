@@ -172,3 +172,42 @@ func (s *Server) UpdateUser() gin.HandlerFunc {
 		ctx.JSON(http.StatusOK, response)
 	}
 }
+
+func (s *Server) Users() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		errResponse := model.Response{
+			Status: model.ResponseError,
+			Msg:    "cannot find users",
+			Data:   nil,
+		}
+
+		users, err := s.userService.Users(ctx.Request.Context())
+
+		if err != nil {
+			s.log.Errorf("service error: %v", err)
+			ctx.JSON(http.StatusInternalServerError, errResponse)
+			return
+		}
+
+		var paginatedUsersResponse []*model.UserPaginatedResponse
+
+		for _, user := range users {
+			userPaginatedResponse := &model.UserPaginatedResponse{
+				IdentityID: user.IdentityID,
+				Username:   user.Username,
+				Profile: &model.ProfilePaginatedResponse{
+					ImageSrc: user.ProfileImageSrc,
+				},
+			}
+			paginatedUsersResponse = append(paginatedUsersResponse, userPaginatedResponse)
+		}
+
+		response := model.Response{
+			Status: model.ResponseSuccess,
+			Msg:    "",
+			Data:   paginatedUsersResponse,
+		}
+
+		ctx.JSON(http.StatusOK, response)
+	}
+}

@@ -12,6 +12,7 @@ func (s *Server) routes() {
 	{
 		authorized.GET("", s.UserMe())
 		authorized.GET("/:identityId", s.UserX())
+		authorized.GET("/users", s.Users())
 
 		authorized.PUT("/update", s.UpdateUser())
 	}

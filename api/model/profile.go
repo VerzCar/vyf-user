@@ -14,6 +14,10 @@ type Profile struct {
 	UpdatedAt              time.Time `json:"updatedAt" gorm:"autoUpdateTime;default:current_timestamp;"`
 }
 
+type ProfilePaginatedResponse struct {
+	ImageSrc string `json:"imageSrc"`
+}
+
 type ProfileRequest struct {
 	Bio       *string `json:"bio" validate:"omitempty,gt=0,lte=1500"`
 	WhyVoteMe *string `json:"whyVoteMe" validate:"omitempty,gt=0,lte=250"`
