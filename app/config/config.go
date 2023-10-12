@@ -130,10 +130,24 @@ func (c *Config) checkEnvironment() {
 
 	if env == EnvironmentProd {
 		c.Environment = EnvironmentProd
-		return
+	} else {
+		c.Environment = EnvironmentDev
 	}
 
-	c.Environment = EnvironmentDev
+	herokuEnvironments := os.Getenv("HEROKU_ENVS")
+
+	if herokuEnvironments == "true" {
+		c.Aws.Auth.ClientId = os.Getenv("AWS_AUTH_CLIENT_ID")
+		c.Aws.Auth.UserPoolId = os.Getenv("AWS_AUTH_USER_POOL_ID")
+		c.Aws.Auth.ClientSecret = os.Getenv("AWS_AUTH_CLIENT_SECRET")
+
+		c.Db.Host = os.Getenv("DB_HOST")
+		c.Db.Name = os.Getenv("DB_NAME")
+		c.Db.User = os.Getenv("DB_USER")
+		c.Db.Password = os.Getenv("DB_PASSWORD")
+
+		c.Host.Service.VoteCircle = os.Getenv("HOST_SERVICE_VOTE_CIRCLE")
+	}
 }
 
 func (c *Config) readConfig(configPath string, configFileType string) {

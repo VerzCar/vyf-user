@@ -4,11 +4,10 @@ FROM golang:1.21 AS build
 COPY ./go.mod ./go.sum src/service-app/
 WORKDIR src/service-app
 
+COPY ./.netrc /root/.netrc
+
 # add workaround to add own repositoriy packages
-RUN git config --global \
-url."https://vecLibsToken:oac9pW1xsTMYbxK4DeYK@gitlab.vecomentman.com/".insteadOf "https://gitlab.vecomentman.com/" && \
-go list -m github.com/VerzCar/vyf-lib-logger && \
-go list -m gitlab.vecomentman.com/libs/email && \
+RUN go list -m github.com/VerzCar/vyf-lib-logger && \
 go list -m github.com/VerzCar/vyf-lib-awsx
 
 # Download all dependencies.
@@ -34,7 +33,6 @@ COPY --from=build /go/bin/main .
 COPY ./app/config/config.service.yml go/src/service-app/app/config/config.service.yml
 COPY ./app/config/secret.service.yml go/src/service-app/app/config/secret.service.yml
 COPY ./app/config/config.logger.yml go/src/service-app/app/config/config.logger.yml
-COPY ./email-templates/dist go/src/service-app/email-templates/dist
 COPY ./repository/migrations go/src/service-app/repository/migrations
 
 # start application
