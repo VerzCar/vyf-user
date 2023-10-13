@@ -108,6 +108,12 @@ func (c *Config) readDefaultConfig(configPath string) {
 // readSecretConfig reads the secret configuration from the given
 // config path. This configuration is required.
 func (c *Config) readSecretConfig(configPath string) {
+	configDir := filepath.Dir(configPath)
+
+	if _, err := os.Stat(configDir + "/" + overrideFileName + ".yml"); os.IsNotExist(err) {
+		return
+	}
+
 	c.readConfig(configPath, secretFileName)
 }
 
