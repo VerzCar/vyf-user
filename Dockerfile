@@ -23,7 +23,8 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o /go/bin/main ./cmd/server/main.go
 
 
 # abstract build layers forms the final image
-FROM scratch
+#FROM scratch # use from scratch if no shell is needed
+FROM alpine
 # copy certs files into scratch image
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
