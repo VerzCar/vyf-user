@@ -31,7 +31,7 @@ COPY --from=build /go/bin/main .
 
 # copy additional data
 COPY ./app/config/config.service.yml go/src/service-app/app/config/config.service.yml
-COPY ./app/config/secret.service.yml go/src/service-app/app/config/secret.service.yml
+#COPY ./app/config/secret.service.yml go/src/service-app/app/config/secret.service.yml
 COPY ./app/config/config.logger.yml go/src/service-app/app/config/config.logger.yml
 COPY ./repository/migrations go/src/service-app/repository/migrations
 
