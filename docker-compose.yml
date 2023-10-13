@@ -32,7 +32,7 @@ services:
       - .env
     build:
       context: .
-      dockerfile: service.dockerfile
+      dockerfile: Dockerfile
 
 networks:
   n_usersvc:
