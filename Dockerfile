@@ -36,4 +36,4 @@ COPY ./app/config/config.logger.yml go/src/service-app/app/config/config.logger.
 COPY ./repository/migrations go/src/service-app/repository/migrations
 
 # start application
-ENTRYPOINT ["/main"]
+CMD ["./main"]
