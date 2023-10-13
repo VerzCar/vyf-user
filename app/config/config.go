@@ -111,7 +111,7 @@ func (c *Config) readDefaultConfig(configPath string) {
 func (c *Config) readSecretConfig(configPath string) {
 	configDir := filepath.Dir(configPath)
 
-	if _, err := os.Stat(configDir + "/" + overrideFileName + ".yml"); os.IsNotExist(err) {
+	if _, err := os.Stat(configDir + "/" + secretFileName + ".yml"); os.IsNotExist(err) {
 		return
 	}
 
