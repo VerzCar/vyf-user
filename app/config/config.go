@@ -10,6 +10,7 @@ import (
 // Config represents the composition of yml settings.
 type Config struct {
 	Environment string
+	Port        string
 
 	Aws struct {
 		Auth struct {
@@ -153,6 +154,8 @@ func (c *Config) checkEnvironment() {
 		c.Db.Password = os.Getenv("DB_PASSWORD")
 
 		c.Host.Service.VoteCircle = os.Getenv("HOST_SERVICE_VOTE_CIRCLE")
+
+		c.Port = os.Getenv("PORT")
 	}
 }
 

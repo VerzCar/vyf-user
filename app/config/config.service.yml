@@ -1,3 +1,6 @@
+# web service
+port: 8080
+
 # hosts
 host:
   service:
