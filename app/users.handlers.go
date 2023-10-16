@@ -1,7 +1,9 @@
 package app
 
 import (
+	"fmt"
 	"github.com/VerzCar/vyf-user/api/model"
+	routerContext "github.com/VerzCar/vyf-user/app/router/ctx"
 	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"
@@ -206,6 +208,81 @@ func (s *Server) Users() gin.HandlerFunc {
 			Status: model.ResponseSuccess,
 			Msg:    "",
 			Data:   paginatedUsersResponse,
+		}
+
+		ctx.JSON(http.StatusOK, response)
+	}
+}
+
+func (s *Server) UploadProfileImage() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		errResponse := model.Response{
+			Status: model.ResponseError,
+			Msg:    "cannot upload file",
+			Data:   nil,
+		}
+
+		authClaims, err := routerContext.ContextToAuthClaims(ctx.Request.Context())
+
+		if err != nil {
+			s.log.Errorf("error getting auth claims: %s", err)
+			ctx.JSON(http.StatusUnauthorized, errResponse)
+			return
+		}
+
+		multiPartFile, err := ctx.FormFile("profileImageFile")
+
+		if err != nil {
+			s.log.Errorf("service error: %v", err)
+			ctx.JSON(http.StatusInternalServerError, errResponse)
+			return
+		}
+
+		contentFile, err := multiPartFile.Open()
+		if err != nil {
+			s.log.Errorf("service error: %v", err)
+			ctx.JSON(http.StatusInternalServerError, errResponse)
+			return
+		}
+
+		defer contentFile.Close()
+
+		filePath := fmt.Sprintf("profile/image/%s/%s", authClaims.Subject, multiPartFile.Filename)
+
+		_, err = s.extStorageService.Upload(
+			ctx.Request.Context(),
+			"test",
+			contentFile,
+		)
+
+		if err != nil {
+			s.log.Errorf("service error: %v", err)
+			ctx.JSON(http.StatusInternalServerError, errResponse)
+			return
+		}
+
+		imageEndpoint := fmt.Sprintf("%s/%s", s.extStorageService.ObjectEndpoint(), filePath)
+
+		updateUserReq := &model.UserUpdateRequest{
+			Profile: &model.ProfileRequest{
+				Bio:       nil,
+				WhyVoteMe: nil,
+				ImageSrc:  &imageEndpoint,
+			},
+		}
+
+		user, err := s.userService.UpdateUser(ctx.Request.Context(), updateUserReq)
+
+		if err != nil {
+			s.log.Errorf("service error: %v", err)
+			ctx.JSON(http.StatusInternalServerError, errResponse)
+			return
+		}
+
+		response := model.Response{
+			Status: model.ResponseSuccess,
+			Msg:    "",
+			Data:   user.Profile.ImageSrc,
 		}
 
 		ctx.JSON(http.StatusOK, response)

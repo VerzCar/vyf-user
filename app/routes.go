@@ -15,5 +15,9 @@ func (s *Server) routes() {
 		authorized.GET("/users", s.Users())
 
 		authorized.PUT("/update", s.UpdateUser())
+
+		// Upload group
+		upload := authorized.Group("/upload")
+		upload.PUT("/profile-img", s.UploadProfileImage())
 	}
 }

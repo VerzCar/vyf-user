@@ -12,29 +12,32 @@ import (
 )
 
 type Server struct {
-	router      *gin.Engine
-	authService awsx.AuthService
-	userService api.UserService
-	validate    sanitizer.Validator
-	config      *config.Config
-	log         logger.Logger
+	router            *gin.Engine
+	authService       awsx.AuthService
+	extStorageService awsx.S3Service
+	userService       api.UserService
+	validate          sanitizer.Validator
+	config            *config.Config
+	log               logger.Logger
 }
 
 func NewServer(
 	router *gin.Engine,
 	authService awsx.AuthService,
+	extStorageService awsx.S3Service,
 	userService api.UserService,
 	validate sanitizer.Validator,
 	config *config.Config,
 	log logger.Logger,
 ) *Server {
 	server := &Server{
-		router:      router,
-		authService: authService,
-		userService: userService,
-		validate:    validate,
-		config:      config,
-		log:         log,
+		router:            router,
+		authService:       authService,
+		extStorageService: extStorageService,
+		userService:       userService,
+		validate:          validate,
+		config:            config,
+		log:               log,
 	}
 
 	server.routes()

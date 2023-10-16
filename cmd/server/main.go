@@ -47,12 +47,26 @@ func run() error {
 		return err
 	}
 
-	// initialize auth service
+	// initialize aws services
 	authService, err := awsx.NewAuthService(
 		awsx.AppClientId(envConfig.Aws.Auth.ClientId),
 		awsx.ClientSecret(envConfig.Aws.Auth.ClientSecret),
 		awsx.AwsDefaultRegion(envConfig.Aws.Auth.AwsDefaultRegion),
 		awsx.UserPoolId(envConfig.Aws.Auth.UserPoolId),
+	)
+
+	if err != nil {
+		return err
+	}
+
+	// initialize aws services
+	s3Service, err := awsx.NewS3Service(
+		awsx.AccessKeyID(envConfig.Aws.S3.AccessKeyId),
+		awsx.AccessKeySecret(envConfig.Aws.S3.AccessKeySecret),
+		awsx.Region(envConfig.Aws.S3.Region),
+		awsx.BucketName(envConfig.Aws.S3.BucketName),
+		awsx.DefaultBaseURL(envConfig.Aws.S3.DefaultBaseURL),
+		awsx.UploadTimeout(envConfig.Aws.S3.UploadTimeout),
 	)
 
 	if err != nil {
@@ -68,6 +82,7 @@ func run() error {
 	server := app.NewServer(
 		r,
 		authService,
+		s3Service,
 		userService,
 		validate,
 		envConfig,

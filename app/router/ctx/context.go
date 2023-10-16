@@ -7,8 +7,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const authClaimsContextKey = "AuthClaimsContextKey"
-const bearerTokenContextKey = "BearerTokenContextKey"
+type scopedContextKey string
+
+const authClaimsContextKey = scopedContextKey("AuthClaimsContextKey")
+const bearerTokenContextKey = scopedContextKey("BearerTokenContextKey")
 
 func SetAuthClaimsContext(ctx *gin.Context, val interface{}) {
 	c := context.WithValue(ctx.Request.Context(), authClaimsContextKey, val)

@@ -19,6 +19,14 @@ type Config struct {
 			AwsDefaultRegion string
 			ClientSecret     string
 		}
+		S3 struct {
+			AccessKeyId     string
+			AccessKeySecret string
+			Region          string
+			BucketName      string
+			UploadTimeout   int
+			DefaultBaseURL  string
+		}
 	}
 
 	Host struct {
