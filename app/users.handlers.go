@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/VerzCar/vyf-user/api/model"
 	routerContext "github.com/VerzCar/vyf-user/app/router/ctx"
+	"github.com/VerzCar/vyf-user/utils"
 	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"
@@ -246,6 +247,22 @@ func (s *Server) UploadProfileImage() gin.HandlerFunc {
 		}
 
 		defer contentFile.Close()
+
+		bytes, err := io.ReadAll(contentFile)
+		if err != nil {
+			s.log.Errorf("service error: %v", err)
+			ctx.JSON(http.StatusInternalServerError, errResponse)
+			return
+		}
+
+		mimeType := http.DetectContentType(bytes)
+
+		if !utils.IsImageMimeType(mimeType) {
+			s.log.Errorf("file type is wrong type: %s", mimeType)
+			errResponse.Msg = "file type is not an image"
+			ctx.JSON(http.StatusNotAcceptable, errResponse)
+			return
+		}
 
 		filePath := fmt.Sprintf("profile/image/%s/%s", authClaims.Subject, multiPartFile.Filename)
 
