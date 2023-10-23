@@ -1,4 +1,4 @@
-FROM golang:1.21 AS build
+FROM golang:1.21.1 AS build
 
 # Populate the module cache based on the go.{mod,sum} files.
 COPY ./go.mod ./go.sum src/service-app/
