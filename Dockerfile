@@ -7,8 +7,8 @@ WORKDIR src/service-app
 COPY ./.netrc /root/.netrc
 
 # add workaround to add own repositoriy packages
-RUN go list -m github.com/VerzCar/vyf-lib-logger && \
-go list -m github.com/VerzCar/vyf-lib-awsx
+#RUN go list -m github.com/VerzCar/vyf-lib-logger && \
+#go list -m github.com/VerzCar/vyf-lib-awsx
 
 # Download all dependencies.
 RUN go mod download
