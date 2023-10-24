@@ -268,7 +268,7 @@ func (s *Server) UploadProfileImage() gin.HandlerFunc {
 
 		_, err = s.extStorageService.Upload(
 			ctx.Request.Context(),
-			"test",
+			filePath,
 			contentFile,
 		)
 
