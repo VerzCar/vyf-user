@@ -264,7 +264,9 @@ func (s *Server) UploadProfileImage() gin.HandlerFunc {
 			return
 		}
 
-		filePath := fmt.Sprintf("profile/image/%s/%s", authClaims.Subject, multiPartFile.Filename)
+		filePath := fmt.Sprintf("profile/image/%s/%s", authClaims.Subject, "avatar")
+
+		_, _ = contentFile.Seek(0, 0)
 
 		_, err = s.extStorageService.Upload(
 			ctx.Request.Context(),
