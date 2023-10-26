@@ -83,7 +83,7 @@ func (s *storage) UsersFiltered(
 		Not(&model.User{IdentityID: callerIdentityID}).
 		Limit(100).
 		Order("username ::bytea").
-		Where("username LIKE ?", fmt.Sprintf("%s%%", username)).
+		Where("username LIKE ?", fmt.Sprintf("%%%s%%", username)).
 		Find(&users).
 		Error
 
