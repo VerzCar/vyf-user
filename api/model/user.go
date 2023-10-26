@@ -53,8 +53,12 @@ type UserPaginatedResponse struct {
 	Profile    *ProfilePaginatedResponse `json:"profile"`
 }
 
-type UserUriRequest struct {
+type UserXUriRequest struct {
 	IdentityID string `uri:"identityId" validate:"lte=50"`
+}
+
+type UserByUriRequest struct {
+	Username string `uri:"username" validate:"lte=50"`
 }
 
 type UserUpdateRequest struct {

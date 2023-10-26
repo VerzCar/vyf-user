@@ -59,7 +59,7 @@ func (s *Server) UserX() gin.HandlerFunc {
 			Data:   nil,
 		}
 
-		userUriReq := &model.UserUriRequest{}
+		userUriReq := &model.UserXUriRequest{}
 
 		err := ctx.ShouldBindUri(userUriReq)
 
@@ -185,6 +185,61 @@ func (s *Server) Users() gin.HandlerFunc {
 		}
 
 		users, err := s.userService.Users(ctx.Request.Context())
+
+		if err != nil {
+			s.log.Errorf("service error: %v", err)
+			ctx.JSON(http.StatusInternalServerError, errResponse)
+			return
+		}
+
+		var paginatedUsersResponse []*model.UserPaginatedResponse
+
+		for _, user := range users {
+			userPaginatedResponse := &model.UserPaginatedResponse{
+				IdentityID: user.IdentityID,
+				Username:   user.Username,
+				Profile: &model.ProfilePaginatedResponse{
+					ImageSrc: user.ProfileImageSrc,
+				},
+			}
+			paginatedUsersResponse = append(paginatedUsersResponse, userPaginatedResponse)
+		}
+
+		response := model.Response{
+			Status: model.ResponseSuccess,
+			Msg:    "",
+			Data:   paginatedUsersResponse,
+		}
+
+		ctx.JSON(http.StatusOK, response)
+	}
+}
+
+func (s *Server) UsersByUsername() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		errResponse := model.Response{
+			Status: model.ResponseError,
+			Msg:    "cannot find users with username",
+			Data:   nil,
+		}
+
+		userUriReq := &model.UserByUriRequest{}
+
+		err := ctx.ShouldBindUri(userUriReq)
+
+		if err != nil {
+			s.log.Error(err)
+			ctx.JSON(http.StatusBadRequest, errResponse)
+			return
+		}
+
+		if err := s.validate.Struct(userUriReq); err != nil {
+			s.log.Warn(err)
+			ctx.JSON(http.StatusBadRequest, errResponse)
+			return
+		}
+
+		users, err := s.userService.UsersFiltered(ctx.Request.Context(), &userUriReq.Username)
 
 		if err != nil {
 			s.log.Errorf("service error: %v", err)

@@ -21,6 +21,10 @@ type UserService interface {
 	Users(
 		ctx context.Context,
 	) ([]*model.UserPaginated, error)
+	UsersFiltered(
+		ctx context.Context,
+		username *string,
+	) ([]*model.UserPaginated, error)
 	UpdateUser(
 		ctx context.Context,
 		userInput *model.UserUpdateRequest,
@@ -30,6 +34,10 @@ type UserService interface {
 type UserRepository interface {
 	UserByIdentityId(id string) (*model.User, error)
 	Users(identityID string) ([]*model.UserPaginated, error)
+	UsersFiltered(
+		callerIdentityID string,
+		username string,
+	) ([]*model.UserPaginated, error)
 	CreateNewUser(user *model.User) (*model.User, error)
 	UpdateUser(user *model.User) (*model.User, error)
 	LocaleByLcidString(lcid string) (*model.Locale, error)
@@ -210,6 +218,26 @@ func (u *userService) Users(
 	}
 
 	users, err := u.storage.Users(authClaims.Subject)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
+}
+
+func (u *userService) UsersFiltered(
+	ctx context.Context,
+	username *string,
+) ([]*model.UserPaginated, error) {
+	authClaims, err := routerContext.ContextToAuthClaims(ctx)
+
+	if err != nil {
+		u.log.Errorf("error getting auth claims: %s", err)
+		return nil, err
+	}
+
+	users, err := u.storage.UsersFiltered(authClaims.Subject, *username)
 
 	if err != nil {
 		return nil, err

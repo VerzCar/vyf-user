@@ -18,16 +18,24 @@ import (
 type Storage interface {
 	RunMigrationsUp(db *sql.DB) error
 	RunMigrationsDown(db *sql.DB) error
+
 	CountryById(id int64) (*model.Country, error)
 	CountryByAlpha2(alpha2 string) (*model.Country, error)
+
 	LocaleByLcidString(lcid string) (*model.Locale, error)
+
 	TransformAddressRequest(src *model.AddressRequest, dest *model.Address) error
 	TransformContactRequest(src *model.ContactRequest, dest *model.Contact) error
+
 	CreateNewUser(user *model.User) (*model.User, error)
 	UpdateUser(user *model.User) (*model.User, error)
 	UserById(id int64) (*model.User, error)
 	UserByIdentityId(id string) (*model.User, error)
 	Users(identityID string) ([]*model.UserPaginated, error)
+	UsersFiltered(
+		callerIdentityID string,
+		username string,
+	) ([]*model.UserPaginated, error)
 }
 
 type storage struct {

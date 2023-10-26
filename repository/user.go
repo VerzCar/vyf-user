@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"github.com/VerzCar/vyf-user/api/model"
 	"github.com/VerzCar/vyf-user/app/database"
 	"gorm.io/gorm"
@@ -55,6 +56,34 @@ func (s *storage) Users(identityID string) ([]*model.UserPaginated, error) {
 		Not(&model.User{IdentityID: identityID}).
 		Limit(100).
 		Order("username ::bytea").
+		Find(&users).
+		Error
+
+	switch {
+	case err != nil && !database.RecordNotFound(err):
+		s.log.Errorf("error reading users: %s", err)
+		return nil, err
+	case database.RecordNotFound(err):
+		s.log.Infof("users not found: %s", err)
+		return nil, err
+	}
+
+	return users, nil
+}
+
+func (s *storage) UsersFiltered(
+	callerIdentityID string,
+	username string,
+) ([]*model.UserPaginated, error) {
+	var users []*model.UserPaginated
+
+	err := s.db.Model(&model.User{}).
+		Select("users.username, users.identity_id, profiles.image_src as profile_image_src").
+		Joins("left join profiles on profiles.id = users.profile_id").
+		Not(&model.User{IdentityID: callerIdentityID}).
+		Limit(100).
+		Order("username ::bytea").
+		Where("username LIKE ?", fmt.Sprintf("%s%%", username)).
 		Find(&users).
 		Error
 
