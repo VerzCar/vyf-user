@@ -61,6 +61,7 @@ require (
 	github.com/VerzCar/vyf-lib-awsx v1.3.7
 	github.com/VerzCar/vyf-lib-logger v1.1.0
 	github.com/rs/cors/wrapper/gin v0.0.0-20230905230807-20a76bd635d3
+	golang.org/x/image v0.13.0
 )
 
 require (

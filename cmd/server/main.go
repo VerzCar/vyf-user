@@ -75,6 +75,7 @@ func run() error {
 
 	// initialize api services
 	userService := api.NewUserService(storage, envConfig, log)
+	userUploadService := api.NewUserUploadService(userService, s3Service, envConfig, log)
 
 	validate = validator.New()
 
@@ -82,8 +83,8 @@ func run() error {
 	server := app.NewServer(
 		r,
 		authService,
-		s3Service,
 		userService,
+		userUploadService,
 		validate,
 		envConfig,
 		log,

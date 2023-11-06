@@ -14,8 +14,8 @@ import (
 type Server struct {
 	router            *gin.Engine
 	authService       awsx.AuthService
-	extStorageService awsx.S3Service
 	userService       api.UserService
+	userUploadService api.UserUploadService
 	validate          sanitizer.Validator
 	config            *config.Config
 	log               logger.Logger
@@ -24,8 +24,8 @@ type Server struct {
 func NewServer(
 	router *gin.Engine,
 	authService awsx.AuthService,
-	extStorageService awsx.S3Service,
 	userService api.UserService,
+	userUploadService api.UserUploadService,
 	validate sanitizer.Validator,
 	config *config.Config,
 	log logger.Logger,
@@ -33,8 +33,8 @@ func NewServer(
 	server := &Server{
 		router:            router,
 		authService:       authService,
-		extStorageService: extStorageService,
 		userService:       userService,
+		userUploadService: userUploadService,
 		validate:          validate,
 		config:            config,
 		log:               log,
