@@ -189,7 +189,7 @@ func (s *Server) Users() gin.HandlerFunc {
 			return
 		}
 
-		var paginatedUsersResponse []*model.UserPaginatedResponse
+		paginatedUsersResponse := make([]*model.UserPaginatedResponse, 0)
 
 		for _, user := range users {
 			userPaginatedResponse := &model.UserPaginatedResponse{
@@ -244,7 +244,7 @@ func (s *Server) UsersByUsername() gin.HandlerFunc {
 			return
 		}
 
-		var paginatedUsersResponse []*model.UserPaginatedResponse
+		paginatedUsersResponse := make([]*model.UserPaginatedResponse, 0)
 
 		for _, user := range users {
 			userPaginatedResponse := &model.UserPaginatedResponse{
