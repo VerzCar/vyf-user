@@ -10,6 +10,7 @@ import (
 	"github.com/VerzCar/vyf-user/app/database"
 	routerContext "github.com/VerzCar/vyf-user/app/router/ctx"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -131,15 +132,15 @@ func (u *userService) UpdateUser(
 	}
 
 	if userInput.Username != nil {
-		user.Username = *userInput.Username
+		user.Username = strings.TrimSpace(*userInput.Username)
 	}
 
 	if userInput.FirstName != nil {
-		user.FirstName = *userInput.FirstName
+		user.FirstName = strings.TrimSpace(*userInput.FirstName)
 	}
 
 	if userInput.LastName != nil {
-		user.LastName = *userInput.LastName
+		user.LastName = strings.TrimSpace(*userInput.LastName)
 	}
 
 	if userInput.Gender != nil {
