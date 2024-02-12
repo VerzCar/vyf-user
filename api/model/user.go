@@ -8,37 +8,37 @@ import (
 )
 
 type User struct {
-	ID         int64         `json:"id" gorm:"primary_key;"`
+	UpdatedAt  time.Time     `json:"updatedAt" gorm:"autoUpdateTime;"`
+	CreatedAt  time.Time     `json:"createdAt" gorm:"autoCreateTime;"`
+	Contact    *Contact      `json:"contact" gorm:"constraint:OnDelete:CASCADE;"`
+	Locale     *Locale       `json:"locale" gorm:"constraint:OnDelete:RESTRICT;"`
+	Address    *Address      `json:"address" gorm:"constraint:OnDelete:CASCADE;"`
+	Profile    *Profile      `json:"profile" gorm:"constraint:OnDelete:CASCADE;"`
 	IdentityID string        `json:"identityId" gorm:"type:varchar(50);unique;not null"`
 	Username   string        `json:"username" gorm:"type:varchar(40);unique;not null"`
 	FirstName  string        `json:"firstName" gorm:"type:varchar(50)"`
 	LastName   string        `json:"lastName" gorm:"type:varchar(50)"`
 	Gender     Gender        `json:"gender" gorm:"type:gender;not null;default:X"`
-	LocaleID   sql.NullInt64 `json:"LocaleId"`
-	Locale     *Locale       `json:"locale" gorm:"constraint:OnDelete:RESTRICT;"`
 	AddressID  sql.NullInt64 `json:"addressId"`
-	Address    *Address      `json:"address" gorm:"constraint:OnDelete:CASCADE;"`
-	ContactID  sql.NullInt64 `json:"contactId"`
-	Contact    *Contact      `json:"contact" gorm:"constraint:OnDelete:CASCADE;"`
 	ProfileID  sql.NullInt64 `json:"profileId"`
-	Profile    *Profile      `json:"profile" gorm:"constraint:OnDelete:CASCADE;"`
-	CreatedAt  time.Time     `json:"createdAt" gorm:"autoCreateTime;"`
-	UpdatedAt  time.Time     `json:"updatedAt" gorm:"autoUpdateTime;"`
+	ContactID  sql.NullInt64 `json:"contactId"`
+	LocaleID   sql.NullInt64 `json:"LocaleId"`
+	ID         int64         `json:"id" gorm:"primary_key;"`
 }
 
 type UserResponse struct {
-	ID         int64     `json:"id"`
+	CreatedAt  time.Time `json:"createdAt"`
+	UpdatedAt  time.Time `json:"updatedAt"`
+	Locale     *Locale   `json:"locale,omitempty"`
+	Address    *Address  `json:"address,omitempty"`
+	Contact    *Contact  `json:"contact,omitempty"`
+	Profile    *Profile  `json:"profile,omitempty"`
 	IdentityID string    `json:"identityId"`
 	Username   string    `json:"username"`
 	FirstName  string    `json:"firstName"`
 	LastName   string    `json:"LastName"`
 	Gender     Gender    `json:"gender"`
-	Locale     *Locale   `json:"locale,omitempty"`
-	Address    *Address  `json:"address,omitempty"`
-	Contact    *Contact  `json:"contact,omitempty"`
-	Profile    *Profile  `json:"profile,omitempty"`
-	CreatedAt  time.Time `json:"createdAt"`
-	UpdatedAt  time.Time `json:"updatedAt"`
+	ID         int64     `json:"id"`
 }
 
 type UserPaginated struct {
@@ -48,9 +48,9 @@ type UserPaginated struct {
 }
 
 type UserPaginatedResponse struct {
+	Profile    *ProfilePaginatedResponse `json:"profile"`
 	IdentityID string                    `json:"identityId"`
 	Username   string                    `json:"username"`
-	Profile    *ProfilePaginatedResponse `json:"profile"`
 }
 
 type UserXUriRequest struct {
