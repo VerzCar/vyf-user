@@ -72,7 +72,6 @@ func (s *storage) Users(identityID string) ([]*model.UserPaginated, error) {
 }
 
 func (s *storage) UsersFiltered(
-	callerIdentityID string,
 	username string,
 ) ([]*model.UserPaginated, error) {
 	var users []*model.UserPaginated
@@ -80,7 +79,6 @@ func (s *storage) UsersFiltered(
 	err := s.db.Model(&model.User{}).
 		Select("users.username, users.identity_id, profiles.image_src as profile_image_src").
 		Joins("left join profiles on profiles.id = users.profile_id").
-		Not(&model.User{IdentityID: callerIdentityID}).
 		Limit(100).
 		Order("username ::bytea").
 		Where("username LIKE ?", fmt.Sprintf("%%%s%%", username)).

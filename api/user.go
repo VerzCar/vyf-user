@@ -36,7 +36,6 @@ type UserRepository interface {
 	UserByIdentityId(id string) (*model.User, error)
 	Users(identityID string) ([]*model.UserPaginated, error)
 	UsersFiltered(
-		callerIdentityID string,
 		username string,
 	) ([]*model.UserPaginated, error)
 	CreateNewUser(user *model.User) (*model.User, error)
@@ -231,14 +230,7 @@ func (u *userService) UsersFiltered(
 	ctx context.Context,
 	username *string,
 ) ([]*model.UserPaginated, error) {
-	authClaims, err := routerContext.ContextToAuthClaims(ctx)
-
-	if err != nil {
-		u.log.Errorf("error getting auth claims: %s", err)
-		return nil, err
-	}
-
-	users, err := u.storage.UsersFiltered(authClaims.Subject, *username)
+	users, err := u.storage.UsersFiltered(*username)
 
 	if err != nil {
 		return nil, err
