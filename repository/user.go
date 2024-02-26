@@ -81,7 +81,7 @@ func (s *storage) UsersFiltered(
 		Joins("left join profiles on profiles.id = users.profile_id").
 		Limit(100).
 		Order("username ::bytea").
-		Where("username LIKE ?", fmt.Sprintf("%%%s%%", username)).
+		Where("username ILIKE ?", fmt.Sprintf("%%%s%%", username)).
 		Find(&users).
 		Error
 
