@@ -1,9 +1,11 @@
 stages:
   - test
 #  - build
+#  - deploy
+
 
 test-source:
-  image: golang:1.18
+  image: golang:1.19
   stage: test
   variables:
     POSTGRES_HOST: "db"
@@ -11,45 +13,38 @@ test-source:
     POSTGRES_NAME: "testdb"
     POSTGRES_USER: "testdb"
     POSTGRES_PASSWORD: "testdb"
-    REDIS_HOST: "cache"
-    REDIS_PORT: "6379"
-    REDIS_DB: "1"
-    REDIS_TIMEOUT: "60"
-    REDIS_PASSWORD: "Start1234"
-    REDIS_REPLICATION_MODE: "master"
   services:
     - name: postgres:13
       alias: db
-    - name: redis:6.2-rc-alpine
-      alias: cache
-      command: [ "redis-server", "--requirepass Start1234" ]
   script:
     - |
       git config --global \
-      url."https://vecLibsToken:oac9pW1xsTMYbxK4DeYK@gitlab.vecomentman.com/".insteadOf "https://gitlab.vecomentman.com/" \
-      && go list -m gitlab.vecomentman.com/libs/email
+      url."https://vecLibsToken:oac9pW1xsTMYbxK4DeYK@gitlab.vecomentman.com/".insteadOf "https://gitlab.vecomentman.com/" && \
+      go list -m github.com/VerzCar/vyf-lib-logger && \
+      go list -m gitlab.vecomentman.com/libs/email && \
+      go list -m github.com/VerzCar/vyf-lib-awsx
     - go mod download
     # copy secret file for dev into container
-    - cp $SECRETS_USER_SVC_DEV $(pwd)/app/config/secret.service.yml
+    - cp $SECRETS_SVC_DEV $(pwd)/app/config/secret.service.yml
     - go test -cover -p 1 ./...
 
-sonarqube-check:
-  image:
-    name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [""]
-  stage: test
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths:
-      - .sonar/cache
-  script:
-    - |
-      sonar-scanner \
-      -Dsonar.qualitygate.wait=true
-  allow_failure: false
+#sonarqube-check:
+#  stage: test
+#  image:
+#    name: sonarsource/sonar-scanner-cli:latest
+#    entrypoint: [ "" ]
+#  variables:
+#    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+#    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+#  cache:
+#    key: "${CI_JOB_NAME}"
+#    paths:
+#      - .sonar/cache
+#  script:
+#    - |
+#      sonar-scanner \
+#      -Dsonar.qualitygate.wait=true
+#  allow_failure: false
 
 
 #build-image-push:
@@ -67,11 +62,24 @@ sonarqube-check:
 #      if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
 #        tag=""
 #        echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
+#        cp $SECRETS_SVC_DEV $(pwd)/app/config/secret.service.yml
 #      else
 #        tag=":$CI_COMMIT_REF_SLUG"
 #        echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
+#        cp $SECRETS_SVC $(pwd)/app/config/secret.service.yml
 #      fi
-#    # copy secret file into build layer
-#    - cp $SECRETS_USER_SVC $(pwd)/app/config/secret.service.yml
 #    - docker build --pull -t "$DO_DOCKER_REGISTRY/$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME${tag}" -f service.dockerfile .
 #    - docker push "$DO_DOCKER_REGISTRY/$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME${tag}"
+#
+## deploy stage
+#deploy:
+#  stage: build
+#  image:
+#    name: bitnami/kubectl:latest
+#    entrypoint: [ '' ]
+#  script:
+#    - kubectl config get-contexts
+#    - kubectl config use-context vote-your-face/service/user:user-k8s-dev
+#    - kubectl get pods
+#    - kubectl apply -f service-manifest.yaml
+#    - kubectl rollout status deployment/user-service

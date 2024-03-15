@@ -3,49 +3,73 @@ package model
 import (
 	"database/sql"
 	"database/sql/driver"
-	"fmt"
 	_ "github.com/go-playground/validator/v10"
-	"io"
-	"strconv"
 	"time"
 )
 
 type User struct {
-	ID         int64         `json:"id" gorm:"primary_key;index;"`
-	IdentityID string        `json:"identityId" gorm:"type:varchar(50);unique;not null"`
-	FirstName  string        `json:"firstName" gorm:"type:varchar(50)"`
-	LastName   string        `json:"LastName" gorm:"type:varchar(50)"`
-	Gender     Gender        `json:"gender" gorm:"type:gender;not null;default:X"`
-	LocaleID   sql.NullInt64 `json:"LocaleId"`
-	Locale     *Locale       `json:"locale" gorm:"constraint:OnDelete:RESTRICT;"`
-	AddressID  sql.NullInt64 `json:"addressId"`
-	Address    *Address      `json:"address" gorm:"constraint:OnDelete:CASCADE;"`
-	ContactID  sql.NullInt64 `json:"contactId"`
-	Contact    *Contact      `json:"contact" gorm:"constraint:OnDelete:CASCADE;"`
-	AvatarUrl  string        `json:"avatarUrl"`
-	CompanyID  *int64        `json:"companyId"`
-	CreatedAt  time.Time     `json:"createdAt" gorm:"autoCreateTime;"`
 	UpdatedAt  time.Time     `json:"updatedAt" gorm:"autoUpdateTime;"`
+	CreatedAt  time.Time     `json:"createdAt" gorm:"autoCreateTime;"`
+	Contact    *Contact      `json:"contact" gorm:"constraint:OnDelete:CASCADE;"`
+	Locale     *Locale       `json:"locale" gorm:"constraint:OnDelete:RESTRICT;"`
+	Address    *Address      `json:"address" gorm:"constraint:OnDelete:CASCADE;"`
+	Profile    *Profile      `json:"profile" gorm:"constraint:OnDelete:CASCADE;"`
+	IdentityID string        `json:"identityId" gorm:"type:varchar(50);unique;not null"`
+	Username   string        `json:"username" gorm:"type:varchar(40);unique;not null"`
+	FirstName  string        `json:"firstName" gorm:"type:varchar(50)"`
+	LastName   string        `json:"lastName" gorm:"type:varchar(50)"`
+	Gender     Gender        `json:"gender" gorm:"type:gender;not null;default:X"`
+	AddressID  sql.NullInt64 `json:"addressId"`
+	ProfileID  sql.NullInt64 `json:"profileId"`
+	ContactID  sql.NullInt64 `json:"contactId"`
+	LocaleID   sql.NullInt64 `json:"LocaleId"`
+	ID         int64         `json:"id" gorm:"primary_key;"`
 }
 
-type UserCreateInput struct {
-	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required,gt=0"`
+type UserResponse struct {
+	CreatedAt  time.Time `json:"createdAt"`
+	UpdatedAt  time.Time `json:"updatedAt"`
+	Locale     *Locale   `json:"locale,omitempty"`
+	Address    *Address  `json:"address,omitempty"`
+	Contact    *Contact  `json:"contact,omitempty"`
+	Profile    *Profile  `json:"profile,omitempty"`
+	IdentityID string    `json:"identityId"`
+	Username   string    `json:"username"`
+	FirstName  string    `json:"firstName"`
+	LastName   string    `json:"LastName"`
+	Gender     Gender    `json:"gender"`
+	ID         int64     `json:"id"`
 }
 
-type UserUpdateInput struct {
-	FirstName *string         `json:"firstName" validate:"omitempty,gt=0,lte=50"`
-	LastName  *string         `json:"lastName" validate:"omitempty,gt=0,lte=50"`
-	Gender    *Gender         `json:"gender"`
-	Locale    *string         `json:"locale" validate:"omitempty,bcp47_language_tag"`
-	AvatarURL *string         `json:"avatarUrl" validate:"omitempty,url"`
-	Address   *AddressInput   `json:"address" validate:"omitempty"`
-	Contact   *ContactInputXs `json:"contact" validate:"omitempty"`
+type UserPaginated struct {
+	IdentityID      string `json:"identityId"`
+	Username        string `json:"username"`
+	ProfileImageSrc string `json:"profileImageSrc"`
 }
 
-type UserResetPasswordInput struct {
-	ResetPasswordToken string `json:"resetPasswordToken"`
-	NewPassword        string `json:"newPassword"`
+type UserPaginatedResponse struct {
+	Profile    *ProfilePaginatedResponse `json:"profile"`
+	IdentityID string                    `json:"identityId"`
+	Username   string                    `json:"username"`
+}
+
+type UserXUriRequest struct {
+	IdentityID string `uri:"identityId" validate:"lte=50"`
+}
+
+type UserByUriRequest struct {
+	Username string `uri:"username" validate:"lte=50"`
+}
+
+type UserUpdateRequest struct {
+	FirstName *string         `json:"firstName,omitempty" validate:"omitempty,gt=0,lte=50"`
+	LastName  *string         `json:"lastName,omitempty" validate:"omitempty,gt=0,lte=50"`
+	Username  *string         `json:"username,omitempty" validate:"omitempty,gt=0,lte=40"`
+	Gender    *Gender         `json:"gender,omitempty" validate:"omitempty"`
+	Locale    *string         `json:"locale,omitempty" validate:"omitempty,bcp47_language_tag"`
+	Address   *AddressRequest `json:"address,omitempty" validate:"omitempty"`
+	Contact   *ContactRequest `json:"contact,omitempty" validate:"omitempty"`
+	Profile   *ProfileRequest `json:"profile,omitempty" validate:"omitempty"`
 }
 
 type Gender string
@@ -81,21 +105,4 @@ func (e Gender) IsValid() bool {
 
 func (e Gender) String() string {
 	return string(e)
-}
-
-func (e *Gender) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = Gender(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid Gender", str)
-	}
-	return nil
-}
-
-func (e Gender) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
 }

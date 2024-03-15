@@ -2,21 +2,12 @@ package app
 
 import (
 	"fmt"
+	"github.com/VerzCar/vyf-lib-awsx"
+	routerContext "github.com/VerzCar/vyf-user/app/router/ctx"
+	"github.com/VerzCar/vyf-user/app/router/header"
 	"github.com/gin-gonic/gin"
-	"gitlab.vecomentman.com/libs/awsx"
-	routerContext "gitlab.vecomentman.com/vote-your-face/service/user/app/router/ctx"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/router/header"
 	"net/http"
 )
-
-// ginContextToContext creates a gin middleware to add its context
-// to the context.Context
-func (s *Server) ginContextToContext() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		routerContext.SetGinContext(ctx)
-		ctx.Next()
-	}
-}
 
 // authGuard verifies the Authorization token against the SSO service.
 // If the authentification fails the request will be aborted.
@@ -42,6 +33,7 @@ func (s *Server) authGuard(authService awsx.AuthService) gin.HandlerFunc {
 		}
 
 		routerContext.SetAuthClaimsContext(ctx, token)
+		routerContext.SetBearerTokenContext(ctx, accessToken)
 		ctx.Next()
 	}
 }

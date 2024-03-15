@@ -1,6 +1,7 @@
 BEGIN;
 
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE
+EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TYPE gender AS ENUM (
     'X',
@@ -28,12 +29,13 @@ create index idx_countries_id
 
 create table contacts
 (
-    id                       bigserial
+    id    bigserial
         constraint contacts_pkey
             primary key,
-    email                    varchar(150) not null
+    email varchar(150) not null
         constraint chk_contacts_email
-            check ((email)::text <> ''::text),
+            check ((email)::text <> ''::text
+) ,
     phone_number             varchar(20)  not null,
     phone_number_country_id  bigint       not null
         constraint fk_contacts_phone_number_country
@@ -57,12 +59,13 @@ create index idx_contacts_id
 
 create table addresses
 (
-    id          bigserial
+    id      bigserial
         constraint addresses_pkey
             primary key,
-    address     varchar(100) not null
+    address varchar(100) not null
         constraint chk_addresses_address
-            check ((address)::text <> ''::text),
+            check ((address)::text <> ''::text
+) ,
     city        varchar(80)  not null
         constraint chk_addresses_city
             check ((city)::text <> ''::text),
@@ -95,39 +98,29 @@ create table locales
 create index idx_locales_id
     on locales (id);
 
-create table companies
+create table profiles
 (
-    id             bigserial
-        constraint companies_pkey
+    id                       bigserial
+        constraint profiles_pkey
             primary key,
-    name           varchar(100)          not null
-        constraint chk_companies_name
-            check ((name)::text <> ''::text),
-    address_id     bigint                not null
-        constraint fk_companies_address
-            references addresses
-            on delete cascade,
-    contact_id     bigint                not null
-        constraint fk_companies_contact
-            references contacts
-            on delete cascade,
-    owner_id       bigint,
-    brand_logo_url text,
-    tax_id         varchar(20),
-    is_verified    boolean default false not null,
-    created_at     timestamp with time zone,
-    updated_at     timestamp with time zone
+    bio                      varchar(1500) not null,
+    why_vote_me              varchar(250)  not null,
+    image_src                text         not null,
+    image_placeholder_colors varchar(15)  not null,
+    created_at               timestamp with time zone default CURRENT_TIMESTAMP,
+    updated_at               timestamp with time zone default CURRENT_TIMESTAMP
 );
 
-create index idx_companies_id
-    on companies (id);
+create index idx_profiles_id
+    on profiles (id);
 
 create table users
 (
     id          bigserial
         constraint users_pkey
             primary key,
-    identity_id varchar(50) unique         not null,
+    identity_id varchar(50) unique not null,
+    username    varchar(40) unique not null,
     first_name  varchar(50),
     last_name   varchar(50),
     gender      gender default 'X'::gender not null,
@@ -143,19 +136,13 @@ create table users
         constraint fk_users_contact
             references contacts
             on delete cascade,
-    company_id  bigint
-        constraint fk_companies_users
-            references companies
-            on delete restrict,
-    avatar_url  text,
+    profile_id  bigint
+        constraint fk_users_profile
+            references profiles
+            on delete cascade,
     created_at  timestamp with time zone,
     updated_at  timestamp with time zone
 );
-
-alter table companies
-    add constraint fk_companies_owner
-        foreign key (owner_id) references users
-            on delete restrict;
 
 create index idx_users_id
     on users (id);

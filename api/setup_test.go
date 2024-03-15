@@ -2,46 +2,52 @@ package api_test
 
 import (
 	"context"
-	"gitlab.vecomentman.com/libs/logger"
-	"gitlab.vecomentman.com/libs/sso"
-	appConfig "gitlab.vecomentman.com/vote-your-face/service/user/app/config"
-	"gitlab.vecomentman.com/vote-your-face/service/user/test/factory"
-	"gitlab.vecomentman.com/vote-your-face/service/user/utils"
+	"github.com/VerzCar/vyf-lib-awsx"
+	"github.com/VerzCar/vyf-lib-logger"
+	appConfig "github.com/VerzCar/vyf-user/app/config"
+	"github.com/VerzCar/vyf-user/utils"
 	"os"
 	"testing"
 )
 
+type MockUser struct {
+	Elon    *awsx.JWTToken
+	NewUser *awsx.JWTToken
+}
+
 var (
-	config *appConfig.Config
-	log    logger.Logger
-	dbUser factory.User
-	ctx    context.Context
+	config   *appConfig.Config
+	log      logger.Logger
+	ctx      context.Context
+	mockUser *MockUser
 )
 
-// Setup test env case
 func TestMain(m *testing.M) {
 	configPath := utils.FromBase("app/config/")
 
 	config = appConfig.NewConfig(configPath)
 	log = logger.NewLogger(configPath)
 
-	dbUser = factory.NewUsers()
-
 	ctx = context.Background()
+
+	mockUser = &MockUser{
+		Elon:    &awsx.JWTToken{Subject: "elon"},
+		NewUser: &awsx.JWTToken{Subject: "newUser"},
+	}
 
 	code := m.Run()
 
 	os.Exit(code)
 }
 
-// login the user into the context
-func ssoUserIntoContext(ssoUser *sso.SsoClaims) context.Context {
-	ctx = context.WithValue(context.Background(), "SsoCtxKey", ssoUser)
+// login the user into the auth context
+func putUserIntoContext(jwtToken *awsx.JWTToken) context.Context {
+	ctx = context.WithValue(context.Background(), "AuthClaimsContextKey", jwtToken)
 	return ctx
 }
 
-// Let the context have an invalid context for the user
-func ssoUserIntoContextFail(ssoUser interface{}) context.Context {
-	ctx = context.WithValue(context.Background(), "failUnicorn555", ssoUser)
+// emptyUserContext represents an authentication token in context without value
+func emptyUserContext() context.Context {
+	ctx = context.WithValue(context.Background(), "AuthClaimsContextKey", nil)
 	return ctx
 }

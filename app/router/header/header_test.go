@@ -2,8 +2,8 @@ package header_test
 
 import (
 	"fmt"
+	"github.com/VerzCar/vyf-user/app/router/header"
 	"github.com/gin-gonic/gin"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/router/header"
 	"net/http"
 	"net/http/httptest"
 	"reflect"

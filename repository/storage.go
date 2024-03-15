@@ -1,59 +1,50 @@
 package repository
 
 import (
-	"context"
 	"database/sql"
 	"fmt"
+	"github.com/VerzCar/vyf-lib-logger"
+	"github.com/VerzCar/vyf-user/api/model"
+	"github.com/VerzCar/vyf-user/app/config"
+	"github.com/VerzCar/vyf-user/app/database"
+	"github.com/VerzCar/vyf-user/utils"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
-	"gitlab.vecomentman.com/libs/logger"
-	"gitlab.vecomentman.com/vote-your-face/service/user/api/model"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/config"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/email"
-	"gitlab.vecomentman.com/vote-your-face/service/user/utils"
-	"gorm.io/gorm"
 	"path/filepath"
 )
 
 type Storage interface {
 	RunMigrationsUp(db *sql.DB) error
 	RunMigrationsDown(db *sql.DB) error
-	UserById(id int64) (*model.User, error)
-	UserByIdentityId(id string) (*model.User, error)
+
 	CountryById(id int64) (*model.Country, error)
 	CountryByAlpha2(alpha2 string) (*model.Country, error)
+
 	LocaleByLcidString(lcid string) (*model.Locale, error)
-	CompanyById(id int64) (*model.Company, error)
-	TransformAddressInput(src *model.AddressInput, dest *model.Address) error
-	TransformContactInput(src *model.ContactInput, dest *model.Contact) error
+
+	TransformAddressRequest(src *model.AddressRequest, dest *model.Address) error
+	TransformContactRequest(src *model.ContactRequest, dest *model.Contact) error
+
 	CreateNewUser(user *model.User) (*model.User, error)
 	UpdateUser(user *model.User) (*model.User, error)
-	CreateNewCompany(
-		company *model.Company,
-		sendCompanyVerificationEmail SendCompanyVerificationEmailCallback,
-		emailData *email.CompanyVerificationData,
-		registerNewCompany RegisterNewCompanyCallback,
-		ctx context.Context,
-		verificationKey string,
-	) error
-	UpdateCompanyIsVerified(
-		companyId int64,
-		cleanUpCompanyRegistration CleanUpCompanyRegistrationCallback,
-		ctx context.Context,
-		verificationKey string,
-	) (*model.Company, error)
+	UserById(id int64) (*model.User, error)
+	UserByIdentityId(id string) (*model.User, error)
+	Users(identityID string) ([]*model.UserPaginated, error)
+	UsersFiltered(
+		username string,
+	) ([]*model.UserPaginated, error)
 }
 
 type storage struct {
-	db     *gorm.DB
+	db     database.Client
 	config *config.Config
 	log    logger.Logger
 }
 
 func NewStorage(
-	db *gorm.DB,
+	db database.Client,
 	config *config.Config,
 	log logger.Logger,
 ) Storage {

@@ -2,24 +2,25 @@ package main
 
 import (
 	"fmt"
+	"github.com/VerzCar/vyf-lib-awsx"
+	"github.com/VerzCar/vyf-lib-logger"
+	"github.com/VerzCar/vyf-user/api"
+	"github.com/VerzCar/vyf-user/app"
+	"github.com/VerzCar/vyf-user/app/config"
+	"github.com/VerzCar/vyf-user/app/database"
+	"github.com/VerzCar/vyf-user/app/router"
+	"github.com/VerzCar/vyf-user/repository"
+	"github.com/VerzCar/vyf-user/utils"
 	"github.com/go-playground/validator/v10"
-	"gitlab.vecomentman.com/libs/awsx"
-	"gitlab.vecomentman.com/libs/logger"
-	"gitlab.vecomentman.com/vote-your-face/service/user/api"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/cache"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/config"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/database"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/email"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/router"
-	"gitlab.vecomentman.com/vote-your-face/service/user/repository"
-	"gitlab.vecomentman.com/vote-your-face/service/user/utils"
 	"os"
 )
 
 func main() {
 	if err := run(); err != nil {
-		fmt.Fprintf(os.Stderr, "startup error: %s\\n", err)
+		_, err := fmt.Fprintf(os.Stderr, "startup error: %s\\n", err)
+		if err != nil {
+			return
+		}
 		os.Exit(1)
 	}
 }
@@ -37,8 +38,6 @@ func run() error {
 
 	db := database.Connect(log, envConfig)
 
-	redisCache := cache.Connect(log, envConfig)
-
 	storage := repository.NewStorage(db, envConfig, log)
 
 	sqlDb, _ := db.DB()
@@ -48,9 +47,7 @@ func run() error {
 		return err
 	}
 
-	redis := cache.NewRedisCache(redisCache, envConfig, log)
-
-	// initialize auth service
+	// initialize aws services
 	authService, err := awsx.NewAuthService(
 		awsx.AppClientId(envConfig.Aws.Auth.ClientId),
 		awsx.ClientSecret(envConfig.Aws.Auth.ClientSecret),
@@ -62,28 +59,36 @@ func run() error {
 		return err
 	}
 
-	// initialize third party services
-	emailService := email.NewService(envConfig, log)
+	// initialize aws services
+	s3Service, err := awsx.NewS3Service(
+		awsx.AccessKeyID(envConfig.Aws.S3.AccessKeyId),
+		awsx.AccessKeySecret(envConfig.Aws.S3.AccessKeySecret),
+		awsx.Region(envConfig.Aws.S3.Region),
+		awsx.BucketName(envConfig.Aws.S3.BucketName),
+		awsx.DefaultBaseURL(envConfig.Aws.S3.DefaultBaseURL),
+		awsx.UploadTimeout(envConfig.Aws.S3.UploadTimeout),
+	)
 
 	if err != nil {
 		return err
 	}
 
 	// initialize api services
-	userService := api.NewUserService(storage, redis, emailService, envConfig, log)
+	userService := api.NewUserService(storage, envConfig, log)
+	userUploadService := api.NewUserUploadService(userService, s3Service, envConfig, log)
 
 	validate = validator.New()
 
-	resolver := app.NewResolver(
+	r := router.Setup(envConfig.Environment)
+	server := app.NewServer(
+		r,
 		authService,
 		userService,
+		userUploadService,
 		validate,
 		envConfig,
 		log,
 	)
-
-	r := router.Setup(envConfig.Environment)
-	server := app.NewServer(r, resolver)
 
 	err = server.Run()
 

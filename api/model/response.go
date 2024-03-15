@@ -1,8 +1,9 @@
 package model
 
 type Response struct {
-	Status ResponseStatus `json:"status"`
 	Data   interface{}    `json:"data"`
+	Status ResponseStatus `json:"status"`
+	Msg    string         `json:"msg"`
 }
 
 type ResponseStatus string
@@ -10,4 +11,5 @@ type ResponseStatus string
 const (
 	ResponseSuccess ResponseStatus = "success"
 	ResponseError   ResponseStatus = "error"
+	ResponseNop     ResponseStatus = "nop"
 )

@@ -10,6 +10,7 @@ import (
 // Config represents the composition of yml settings.
 type Config struct {
 	Environment string
+	Port        string
 
 	Aws struct {
 		Auth struct {
@@ -18,51 +19,19 @@ type Config struct {
 			AwsDefaultRegion string
 			ClientSecret     string
 		}
-	}
-
-	Hosts struct {
-		Vec string
-		Svc struct {
-			Payment string
-			Sso     string
+		S3 struct {
+			AccessKeyId     string
+			AccessKeySecret string
+			Region          string
+			BucketName      string
+			UploadTimeout   int
+			DefaultBaseURL  string
 		}
 	}
 
-	Smtp struct {
-		Host    string
-		Port    uint16
-		NoReply struct {
-			User     string
-			Password string
-		}
-		Account struct {
-			User     string
-			Password string
-		}
-	}
-
-	Emails struct {
-		Enabled bool
-		From    struct {
-			NoReply struct {
-				Email string
-				Name  string
-			}
-			Vecomentman struct {
-				Email string
-				Name  string
-			}
-			Company struct {
-				Email string
-				Name  string
-			}
-			Account struct {
-				Email string
-				Name  string
-			}
-		}
-		Test struct {
-			Email string
+	Host struct {
+		Service struct {
+			VoteCircle string
 		}
 	}
 
@@ -79,18 +48,6 @@ type Config struct {
 			Name     string
 			User     string
 			Password string
-		}
-	}
-
-	Redis struct {
-		Host     string
-		Port     uint16
-		Username string
-		Db       uint16
-		Timeout  uint16
-		Password string
-		Test     struct {
-			Db uint16
 		}
 	}
 
@@ -121,16 +78,6 @@ type Config struct {
 			Email    string
 			Name     string
 			Password string
-		}
-	}
-
-	DockerTest struct {
-		UserSvc struct {
-			ImageName     string
-			Tag           string
-			ContainerName string
-			Hostname      string
-			Networks      []string
 		}
 	}
 }
@@ -170,6 +117,12 @@ func (c *Config) readDefaultConfig(configPath string) {
 // readSecretConfig reads the secret configuration from the given
 // config path. This configuration is required.
 func (c *Config) readSecretConfig(configPath string) {
+	configDir := filepath.Dir(configPath)
+
+	if _, err := os.Stat(configDir + "/" + secretFileName + ".yml"); os.IsNotExist(err) {
+		return
+	}
+
 	c.readConfig(configPath, secretFileName)
 }
 
@@ -192,10 +145,32 @@ func (c *Config) checkEnvironment() {
 
 	if env == EnvironmentProd {
 		c.Environment = EnvironmentProd
-		return
+	} else {
+		c.Environment = EnvironmentDev
 	}
 
-	c.Environment = EnvironmentDev
+	herokuEnvironments := os.Getenv("HEROKU_ENVS")
+
+	if herokuEnvironments == "true" {
+		c.Aws.Auth.ClientId = os.Getenv("AWS_AUTH_CLIENT_ID")
+		c.Aws.Auth.UserPoolId = os.Getenv("AWS_AUTH_USER_POOL_ID")
+		c.Aws.Auth.ClientSecret = os.Getenv("AWS_AUTH_CLIENT_SECRET")
+
+		c.Aws.S3.AccessKeyId = os.Getenv("AWS_S3_ACCESS_KEY")
+		c.Aws.S3.AccessKeySecret = os.Getenv("AWS_S3_ACCESS_SECRET_KEY")
+		c.Aws.S3.Region = os.Getenv("AWS_S3_REGION")
+		c.Aws.S3.BucketName = os.Getenv("AWS_S3_BUCKET_NAME")
+		c.Aws.S3.DefaultBaseURL = os.Getenv("AWS_S3_DEFAULT_BASE_URL")
+
+		c.Db.Host = os.Getenv("DB_HOST")
+		c.Db.Name = os.Getenv("DB_NAME")
+		c.Db.User = os.Getenv("DB_USER")
+		c.Db.Password = os.Getenv("DB_PASSWORD")
+
+		c.Host.Service.VoteCircle = os.Getenv("HOST_SERVICE_VOTE_CIRCLE")
+
+		c.Port = os.Getenv("PORT")
+	}
 }
 
 func (c *Config) readConfig(configPath string, configFileType string) {

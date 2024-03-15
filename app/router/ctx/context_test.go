@@ -2,66 +2,123 @@ package ctx
 
 import (
 	"context"
+	"github.com/VerzCar/vyf-lib-awsx"
 	"github.com/gin-gonic/gin"
-	"github.com/stretchr/testify/require"
-	"gitlab.vecomentman.com/libs/sso"
+	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
 )
 
-func TestSetGinContext(t *testing.T) {
-	req := &http.Request{}
-	parentGinContext := &gin.Context{
-		Request: req,
+func TestSetAuthClaimsContext(t *testing.T) {
+	tests := []struct {
+		name string
+		val  interface{}
+	}{
+		{
+			name: "Test Set Auth Claims Context",
+			val:  &awsx.JWTToken{},
+		},
 	}
-	SetGinContext(parentGinContext)
 
-	ginContext := parentGinContext.Request.Context().Value(ginContextKey)
-	require.NotNil(t, ginContext)
-
-	_, ok := ginContext.(*gin.Context)
-
-	require.True(t, ok)
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				ctx := &gin.Context{
+					Request: &http.Request{},
+				}
+				SetAuthClaimsContext(ctx, tt.val)
+				assert.NotNil(t, ctx.Request.Context().Value(authClaimsContextKey))
+			},
+		)
+	}
 }
 
-func TestContextToGinContext(t *testing.T) {
-	ctx := context.Background()
-	parentGinContext := &gin.Context{}
-	testContext := context.WithValue(ctx, ginContextKey, parentGinContext)
-	ginCtx, err := ContextToGinContext(testContext)
+func TestSetBearerTokenContext(t *testing.T) {
+	tests := []struct {
+		name string
+		val  string
+	}{
+		{
+			name: "Test Set Bearer Token Context",
+			val:  "testToken",
+		},
+	}
 
-	require.Nil(t, err)
-	require.Empty(t, ginCtx.Params.ByName("example"))
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				ctx := &gin.Context{
+					Request: &http.Request{},
+				}
+				SetBearerTokenContext(ctx, tt.val)
+				assert.NotNil(t, ctx.Request.Context().Value(bearerTokenContextKey))
+			},
+		)
+	}
 }
 
-func TestSetSsoClaimsContext(t *testing.T) {
-	req := &http.Request{}
-	parentGinContext := &gin.Context{
-		Request: req,
+func TestContextToAuthClaims(t *testing.T) {
+	tests := []struct {
+		name string
+		val  interface{}
+		err  bool
+	}{
+		{
+			name: "Test Context To Auth Claims - Success",
+			val:  &awsx.JWTToken{},
+			err:  false,
+		},
+		{
+			name: "Test Context To Auth Claims - Failure",
+			val:  "invalid",
+			err:  true,
+		},
 	}
-	ssoValue := &sso.SsoClaims{
-		Name: "Example",
+
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				ctx := context.WithValue(context.Background(), authClaimsContextKey, tt.val)
+				_, err := ContextToAuthClaims(ctx)
+				if tt.err {
+					assert.Error(t, err)
+				} else {
+					assert.NoError(t, err)
+				}
+			},
+		)
 	}
-	SetSsoClaimsContext(parentGinContext, ssoValue)
-
-	ssoContext := parentGinContext.Request.Context().Value(ssoContextKey)
-	require.NotNil(t, ssoContext)
-
-	contextSsoValue, ok := ssoContext.(*sso.SsoClaims)
-
-	require.True(t, ok)
-	require.Equal(t, contextSsoValue, ssoValue)
 }
 
-func TestContextToSsoClaims(t *testing.T) {
-	ctx := context.Background()
-	ssoValue := &sso.SsoClaims{
-		Name: "Example",
+func TestContextToBearerToken(t *testing.T) {
+	tests := []struct {
+		name string
+		val  interface{}
+		err  bool
+	}{
+		{
+			name: "Test Context To Bearer Token - Success",
+			val:  "testToken",
+			err:  false,
+		},
+		{
+			name: "Test Context To Bearer Token - Failure",
+			val:  123,
+			err:  true,
+		},
 	}
 
-	testContext := context.WithValue(ctx, ssoContextKey, ssoValue)
-	contextSsoValue, err := ContextToSsoClaims(testContext)
-
-	require.Nil(t, err)
-	require.Equal(t, contextSsoValue, ssoValue)
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				ctx := context.WithValue(context.Background(), bearerTokenContextKey, tt.val)
+				_, err := ContextToBearerToken(ctx)
+				if tt.err {
+					assert.Error(t, err)
+				} else {
+					assert.NoError(t, err)
+				}
+			},
+		)
+	}
 }

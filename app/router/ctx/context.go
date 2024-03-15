@@ -3,38 +3,22 @@ package ctx
 import (
 	"context"
 	"fmt"
+	"github.com/VerzCar/vyf-lib-awsx"
 	"github.com/gin-gonic/gin"
-	"gitlab.vecomentman.com/libs/awsx"
 )
 
-const ginContextKey = "GinCtxKey"
-const authClaimsContextKey = "AuthClaimsContextKey"
+type scopedContextKey string
 
-func SetGinContext(ctx *gin.Context) {
-	c := context.WithValue(ctx.Request.Context(), ginContextKey, ctx)
-	ctx.Request = ctx.Request.WithContext(c)
-}
-
-func ContextToGinContext(ctx context.Context) (*gin.Context, error) {
-	ginContext := ctx.Value(ginContextKey)
-
-	if ginContext == nil {
-		err := fmt.Errorf("could not retrieve gin.Context")
-		return nil, err
-	}
-
-	gc, ok := ginContext.(*gin.Context)
-
-	if !ok {
-		err := fmt.Errorf("gin.Context has wrong type")
-		return nil, err
-	}
-
-	return gc, nil
-}
+const authClaimsContextKey = scopedContextKey("AuthClaimsContextKey")
+const bearerTokenContextKey = scopedContextKey("BearerTokenContextKey")
 
 func SetAuthClaimsContext(ctx *gin.Context, val interface{}) {
 	c := context.WithValue(ctx.Request.Context(), authClaimsContextKey, val)
+	ctx.Request = ctx.Request.WithContext(c)
+}
+
+func SetBearerTokenContext(ctx *gin.Context, val string) {
+	c := context.WithValue(ctx.Request.Context(), bearerTokenContextKey, val)
 	ctx.Request = ctx.Request.WithContext(c)
 }
 
@@ -54,4 +38,22 @@ func ContextToAuthClaims(ctx context.Context) (*awsx.JWTToken, error) {
 	}
 
 	return authClaims, nil
+}
+
+func ContextToBearerToken(ctx context.Context) (string, error) {
+	bearerTokenValue := ctx.Value(bearerTokenContextKey)
+
+	if bearerTokenValue == nil {
+		err := fmt.Errorf("could not retrieve bearer token")
+		return "", err
+	}
+
+	bearerToken, ok := bearerTokenValue.(string)
+
+	if !ok {
+		err := fmt.Errorf("bearer token has wrong type")
+		return "", err
+	}
+
+	return bearerToken, nil
 }

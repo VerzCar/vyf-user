@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"gitlab.vecomentman.com/vote-your-face/service/user/api/model"
-	"gitlab.vecomentman.com/vote-your-face/service/user/app/database"
+	"github.com/VerzCar/vyf-user/api/model"
+	"github.com/VerzCar/vyf-user/app/database"
 )
 
 // CountryById gets the country by id
