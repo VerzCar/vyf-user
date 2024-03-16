@@ -1,5 +1,7 @@
 package app
 
+import cors "github.com/rs/cors/wrapper/gin"
+
 func (s *Server) routes() {
 	router := s.router
 
@@ -9,6 +11,7 @@ func (s *Server) routes() {
 	// Authorization group
 	authorized := v1.Group("/")
 	authorized.Use(s.authGuard(s.authService))
+	authorized.Use(cors.AllowAll())
 	{
 		authorized.GET("", s.UserMe())
 		authorized.GET("/:identityId", s.UserX())
