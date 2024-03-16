@@ -35,7 +35,16 @@ func addMiddleware(r *gin.Engine) {
 			http.MethodPatch,
 			http.MethodDelete,
 		},
-		AllowedHeaders:   []string{"Origin"},
+		AllowedHeaders: []string{
+			"Origin",
+			"X-Requested-With",
+			"Content-Type",
+			"Accept",
+			"x-client-key",
+			"x-client-token",
+			"x-client-secret",
+			"Authorization",
+		},
 		ExposedHeaders:   []string{"Content-Length"},
 		MaxAge:           10800, // 3 hours
 		AllowCredentials: true,
