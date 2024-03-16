@@ -6,7 +6,7 @@ func (s *Server) routes() {
 	router := s.router
 
 	// Service group
-	v1 := router.Group("/v1/api/user")
+	v1 := router.Group("/v1/api/user", cors.AllowAll())
 
 	// Authorization group
 	authorized := v1.Group("/")
