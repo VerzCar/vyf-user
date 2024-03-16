@@ -4,7 +4,6 @@ import (
 	"github.com/VerzCar/vyf-user/app/config"
 	"github.com/gin-gonic/gin"
 	cors "github.com/rs/cors/wrapper/gin"
-	"net/http"
 )
 
 // Setup the router
@@ -22,34 +21,34 @@ func Setup(environment string) *gin.Engine {
 
 // AddMiddleware adds the available middlewares to the router
 func addMiddleware(r *gin.Engine) {
-	corsOptions := cors.Options{
-		AllowedOrigins: []string{
-			"*",
-			"https://vyf-web-app-c3f1d65ba31f.herokuapp.com",
-			"https://vyf-web-app-c3f1d65ba31f.herokuapp.com/",
-		},
-		AllowedMethods: []string{
-			http.MethodHead,
-			http.MethodGet,
-			http.MethodPost,
-			http.MethodPut,
-			http.MethodPatch,
-			http.MethodDelete,
-		},
-		AllowedHeaders: []string{
-			"Origin",
-			"X-Requested-With",
-			"Content-Type",
-			"Accept",
-			"x-client-key",
-			"x-client-token",
-			"x-client-secret",
-			"Authorization",
-		},
-		ExposedHeaders:   []string{"Content-Length"},
-		MaxAge:           10800, // 3 hours
-		AllowCredentials: true,
-		Debug:            true,
-	}
-	r.Use(cors.New(corsOptions))
+	//corsOptions := cors.Options{
+	//	AllowedOrigins: []string{
+	//		"*",
+	//		"https://vyf-web-app-c3f1d65ba31f.herokuapp.com",
+	//		"https://vyf-web-app-c3f1d65ba31f.herokuapp.com/",
+	//	},
+	//	AllowedMethods: []string{
+	//		http.MethodHead,
+	//		http.MethodGet,
+	//		http.MethodPost,
+	//		http.MethodPut,
+	//		http.MethodPatch,
+	//		http.MethodDelete,
+	//	},
+	//	AllowedHeaders: []string{
+	//		"Origin",
+	//		"X-Requested-With",
+	//		"Content-Type",
+	//		"Accept",
+	//		"x-client-key",
+	//		"x-client-token",
+	//		"x-client-secret",
+	//		"Authorization",
+	//	},
+	//	ExposedHeaders:   []string{"Content-Length"},
+	//	MaxAge:           10800, // 3 hours
+	//	AllowCredentials: true,
+	//	Debug:            true,
+	//}
+	r.Use(cors.AllowAll())
 }
