@@ -49,6 +49,7 @@ func addMiddleware(r *gin.Engine) {
 		ExposedHeaders:   []string{"Content-Length"},
 		MaxAge:           10800, // 3 hours
 		AllowCredentials: true,
+		Debug:            true,
 	}
 	r.Use(cors.New(corsOptions))
 }
