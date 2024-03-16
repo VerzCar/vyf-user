@@ -24,6 +24,7 @@ func Setup(environment string) *gin.Engine {
 func addMiddleware(r *gin.Engine) {
 	corsOptions := cors.Options{
 		AllowedOrigins: []string{
+			"*",
 			"https://vyf-web-app-c3f1d65ba31f.herokuapp.com",
 			"https://vyf-web-app-c3f1d65ba31f.herokuapp.com/",
 		},
