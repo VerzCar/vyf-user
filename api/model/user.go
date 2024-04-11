@@ -36,7 +36,7 @@ type UserResponse struct {
 	IdentityID string    `json:"identityId"`
 	Username   string    `json:"username"`
 	FirstName  string    `json:"firstName"`
-	LastName   string    `json:"LastName"`
+	LastName   string    `json:"lastName"`
 	Gender     Gender    `json:"gender"`
 	ID         int64     `json:"id"`
 }
