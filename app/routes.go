@@ -20,5 +20,6 @@ func (s *Server) routes() {
 		// Upload group
 		upload := authorized.Group("/upload")
 		upload.PUT("/profile-img", s.UploadProfileImage())
+		upload.DELETE("/profile-img", s.DeleteProfileImage())
 	}
 }
