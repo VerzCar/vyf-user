@@ -45,12 +45,14 @@ type UserPaginated struct {
 	IdentityID      string `json:"identityId"`
 	Username        string `json:"username"`
 	ProfileImageSrc string `json:"profileImageSrc"`
+	ID              int64  `json:"id"`
 }
 
 type UserPaginatedResponse struct {
 	Profile    *ProfilePaginatedResponse `json:"profile"`
 	IdentityID string                    `json:"identityId"`
 	Username   string                    `json:"username"`
+	ID         int64                     `json:"id"`
 }
 
 type UserXUriRequest struct {

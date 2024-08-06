@@ -193,6 +193,7 @@ func (s *Server) Users() gin.HandlerFunc {
 
 		for _, user := range users {
 			userPaginatedResponse := &model.UserPaginatedResponse{
+				ID:         user.ID,
 				IdentityID: user.IdentityID,
 				Username:   user.Username,
 				Profile: &model.ProfilePaginatedResponse{
@@ -248,6 +249,7 @@ func (s *Server) UsersByUsername() gin.HandlerFunc {
 
 		for _, user := range users {
 			userPaginatedResponse := &model.UserPaginatedResponse{
+				ID:         user.ID,
 				IdentityID: user.IdentityID,
 				Username:   user.Username,
 				Profile: &model.ProfilePaginatedResponse{
