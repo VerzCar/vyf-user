@@ -44,6 +44,8 @@ type UserResponse struct {
 type UserPaginated struct {
 	IdentityID      string `json:"identityId"`
 	Username        string `json:"username"`
+	FirstName       string `json:"firstName"`
+	LastName        string `json:"lastName"`
 	ProfileImageSrc string `json:"profileImageSrc"`
 	ID              int64  `json:"id"`
 }
@@ -52,6 +54,8 @@ type UserPaginatedResponse struct {
 	Profile    *ProfilePaginatedResponse `json:"profile"`
 	IdentityID string                    `json:"identityId"`
 	Username   string                    `json:"username"`
+	FirstName  string                    `json:"firstName"`
+	LastName   string                    `json:"lastName"`
 	ID         int64                     `json:"id"`
 }
 

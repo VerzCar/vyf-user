@@ -196,6 +196,8 @@ func (s *Server) Users() gin.HandlerFunc {
 				ID:         user.ID,
 				IdentityID: user.IdentityID,
 				Username:   user.Username,
+				FirstName:  user.FirstName,
+				LastName:   user.LastName,
 				Profile: &model.ProfilePaginatedResponse{
 					ImageSrc: user.ProfileImageSrc,
 				},
@@ -252,6 +254,8 @@ func (s *Server) UsersByUsername() gin.HandlerFunc {
 				ID:         user.ID,
 				IdentityID: user.IdentityID,
 				Username:   user.Username,
+				FirstName:  user.FirstName,
+				LastName:   user.LastName,
 				Profile: &model.ProfilePaginatedResponse{
 					ImageSrc: user.ProfileImageSrc,
 				},
