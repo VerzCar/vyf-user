@@ -84,6 +84,8 @@ func (s *storage) UsersFiltered(
 		Limit(100).
 		Order("username ::bytea").
 		Where("username ILIKE ?", fmt.Sprintf("%%%s%%", username)).
+		Or("first_name ILIKE ?", fmt.Sprintf("%%%s%%", username)).
+		Or("last_name ILIKE ?", fmt.Sprintf("%%%s%%", username)).
 		Find(&users).
 		Error
 
