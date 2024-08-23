@@ -193,8 +193,11 @@ func (s *Server) Users() gin.HandlerFunc {
 
 		for _, user := range users {
 			userPaginatedResponse := &model.UserPaginatedResponse{
+				ID:         user.ID,
 				IdentityID: user.IdentityID,
 				Username:   user.Username,
+				FirstName:  user.FirstName,
+				LastName:   user.LastName,
 				Profile: &model.ProfilePaginatedResponse{
 					ImageSrc: user.ProfileImageSrc,
 				},
@@ -248,8 +251,11 @@ func (s *Server) UsersByUsername() gin.HandlerFunc {
 
 		for _, user := range users {
 			userPaginatedResponse := &model.UserPaginatedResponse{
+				ID:         user.ID,
 				IdentityID: user.IdentityID,
 				Username:   user.Username,
+				FirstName:  user.FirstName,
+				LastName:   user.LastName,
 				Profile: &model.ProfilePaginatedResponse{
 					ImageSrc: user.ProfileImageSrc,
 				},
@@ -284,6 +290,32 @@ func (s *Server) UploadProfileImage() gin.HandlerFunc {
 		}
 
 		imageSrc, err := s.userUploadService.UploadImage(ctx.Request.Context(), multiPartFile)
+
+		if err != nil {
+			s.log.Errorf("service error: %v", err)
+			ctx.JSON(http.StatusInternalServerError, errResponse)
+			return
+		}
+
+		response := model.Response{
+			Status: model.ResponseSuccess,
+			Msg:    "",
+			Data:   imageSrc,
+		}
+
+		ctx.JSON(http.StatusOK, response)
+	}
+}
+
+func (s *Server) DeleteProfileImage() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		errResponse := model.Response{
+			Status: model.ResponseError,
+			Msg:    "cannot delete file",
+			Data:   nil,
+		}
+
+		imageSrc, err := s.userUploadService.DeleteImage(ctx.Request.Context())
 
 		if err != nil {
 			s.log.Errorf("service error: %v", err)

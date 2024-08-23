@@ -34,6 +34,7 @@ type Storage interface {
 	Users(identityID string) ([]*model.UserPaginated, error)
 	UsersFiltered(
 		username string,
+		identityID string,
 	) ([]*model.UserPaginated, error)
 }
 

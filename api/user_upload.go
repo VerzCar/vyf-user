@@ -25,6 +25,9 @@ type UserUploadService interface {
 		ctx context.Context,
 		multiPartFile *multipart.FileHeader,
 	) (string, error)
+	DeleteImage(
+		ctx context.Context,
+	) (string, error)
 }
 
 type userUploadService struct {
@@ -126,6 +129,26 @@ func (u *userUploadService) UploadImage(
 	}
 
 	_, err = u.userService.UpdateUser(ctx, updateUserReq)
+
+	if err != nil {
+		return "", err
+	}
+
+	return imageEndpoint, nil
+}
+
+func (u *userUploadService) DeleteImage(
+	ctx context.Context,
+) (string, error) {
+	imageEndpoint := ""
+
+	updateUserReq := &model.UserUpdateRequest{
+		Profile: &model.ProfileRequest{
+			ImageSrc: &imageEndpoint,
+		},
+	}
+
+	_, err := u.userService.UpdateUser(ctx, updateUserReq)
 
 	if err != nil {
 		return "", err

@@ -5,6 +5,7 @@ import (
 	"github.com/spf13/viper"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // Config represents the composition of yml settings.
@@ -170,6 +171,8 @@ func (c *Config) checkEnvironment() {
 		c.Host.Service.VoteCircle = os.Getenv("HOST_SERVICE_VOTE_CIRCLE")
 
 		c.Port = os.Getenv("PORT")
+
+		c.Security.Cors.Origins = strings.Split(os.Getenv("SECURITY_CORS_ORIGINS"), ",")
 	}
 }
 
